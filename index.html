@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="건강 트래커"/>
@@ -11,204 +11,188 @@
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
 <link rel="manifest" href="manifest.json"/>
-<title>건강 트래커 — Den & 아키</title>
-
+<title>건강 트래커</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
   --green:#0B7A54;--green-light:#B8E8D4;--green-dark:#052E1F;
-  --green-mid:#0F9666;
   --amber:#C47F00;--red:#B82020;--red-light:#F5CECE;
-  --bg:#F5F2EC;--bg2:#E8E3DA;--bg3:#D8D2C6;
-  --card:#FFFFFF;
+  --bg:#F5F2EC;--bg2:#E8E3DA;--bg3:#D8D2C6;--card:#FFFFFF;
   --text:#0A0A08;--muted:#555550;--hint:#888880;
-  --border:rgba(0,0,0,0.15);--border-strong:rgba(0,0,0,0.25);
+  --border:rgba(0,0,0,0.12);--border-strong:rgba(0,0,0,0.22);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 @media(prefers-color-scheme:dark){
-  :root{
-    --bg:#0E0E0C;--bg2:#1A1A18;--bg3:#242420;
-    --card:#1E1E1C;
-    --text:#F5F2EC;--muted:#A0A09A;--hint:#6A6A64;
-    --border:rgba(255,255,255,0.12);--border-strong:rgba(255,255,255,0.22);
-  }
+  :root{--bg:#0E0E0C;--bg2:#1A1A18;--bg3:#242420;--card:#1E1E1C;
+  --text:#F5F2EC;--muted:#A0A09A;--hint:#6A6A64;
+  --border:rgba(255,255,255,0.1);--border-strong:rgba(255,255,255,0.2);}
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-.app{max-width:480px;margin:0 auto;padding-bottom:80px;}
-
-/* Header */
-.header{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-end;}
-.header-title{font-size:22px;font-weight:500;color:var(--text);}
-.header-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:480px;margin:0 auto;}
+.header{padding:calc(var(--safe-top) + 14px) 20px 12px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;}
+.header-left{}
+.header-title{font-size:20px;font-weight:600;color:var(--text);}
+.header-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.header-ver{font-size:10px;color:var(--hint);margin-top:1px;}
 .date-nav{display:flex;align-items:center;gap:6px;}
-.date-nav button{background:var(--card);border:1px solid var(--border-strong);border-radius:8px;padding:5px 10px;cursor:pointer;color:var(--text);font-size:14px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-weight:500;}
-.date-str{font-family:'SF Mono','Courier New',monospace;font-size:12px;color:var(--text);min-width:80px;text-align:center;font-weight:500;}
-
-/* Bottom Nav */
-.bottom-nav{position:fixed;bottom:0;background:var(--card);border-top:1px solid var(--border-strong);display:flex;z-index:100;width:100%;max-width:480px;left:50%;transform:translateX(-50%);}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 14px;cursor:pointer;color:var(--hint);font-size:11px;gap:4px;border:none;background:none;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;}
+.date-nav button{background:var(--bg2);border:1px solid var(--border-strong);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text);font-size:16px;min-width:36px;min-height:36px;}
+.date-str{font-family:'SF Mono','Courier New',monospace;font-size:12px;color:var(--text);min-width:76px;text-align:center;font-weight:500;}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 20px 20px;}
+.bottom-nav{flex-shrink:0;background:var(--card);border-top:1px solid var(--border-strong);display:flex;padding-bottom:var(--safe-bottom);}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 8px;cursor:pointer;color:var(--hint);font-size:10px;gap:3px;border:none;background:none;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-height:50px;}
 .nav-item.active{color:var(--green);}
-.nav-icon{font-size:20px;line-height:1;}
-
-/* Panels */
-.panel{display:none;padding:16px 20px;}.panel.active{display:block;}
-.sec-label{font-size:11px;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;text-transform:uppercase;font-weight:500;}
-
-/* Cards */
+.nav-icon{font-size:22px;line-height:1;}
+.panel{display:none;}.panel.active{display:block;}
+.sec-label{font-size:11px;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;text-transform:uppercase;font-weight:600;}
 .card{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;overflow:hidden;margin-bottom:14px;}
-.check-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;user-select:none;}
+.check-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;min-height:56px;}
 .check-row:last-child{border-bottom:none;}
 .check-row:active{background:var(--bg2);}
-.check-left{display:flex;align-items:center;gap:11px;}
-.check-icon{width:26px;height:26px;border-radius:50%;border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.check-left{display:flex;align-items:center;gap:12px;flex:1;}
+.check-icon{width:28px;height:28px;border-radius:50%;border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
 .check-icon.done{background:var(--green);border-color:var(--green);}
-.check-icon.done::after{content:'';width:11px;height:7px;border-left:2.5px solid white;border-bottom:2.5px solid white;transform:rotate(-45deg) translateY(-1px);display:block;}
-.check-name{font-size:14px;color:var(--text);font-weight:500;}
+.check-icon.done::after{content:'';width:12px;height:7px;border-left:2.5px solid white;border-bottom:2.5px solid white;transform:rotate(-45deg) translateY(-1px);display:block;}
+.check-name{font-size:15px;color:var(--text);font-weight:500;}
 .check-sub{font-size:12px;color:var(--muted);margin-top:2px;}
-.who-badge{font-size:10px;padding:3px 8px;border-radius:99px;background:var(--green-light);color:var(--green-dark);font-weight:500;}
-.time-group-label{font-size:11px;color:var(--muted);padding:8px 15px 5px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;font-weight:500;letter-spacing:.05em;}
-
-/* Progress */
+.who-badge{font-size:11px;padding:3px 9px;border-radius:99px;background:var(--green-light);color:var(--green-dark);font-weight:600;flex-shrink:0;}
+.time-group-label{font-size:12px;color:var(--muted);padding:8px 15px 6px;background:var(--bg2);border-bottom:1px solid var(--border);font-weight:600;letter-spacing:.04em;}
 .progress-wrap{margin-bottom:14px;}
-.progress-label{display:flex;justify-content:space-between;font-size:13px;color:var(--text);margin-bottom:7px;font-weight:500;}
+.progress-label{display:flex;justify-content:space-between;font-size:14px;color:var(--text);margin-bottom:8px;font-weight:600;}
 .progress-bar{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden;}
 .progress-fill{height:100%;background:var(--green);border-radius:99px;transition:width .4s;}
-
-/* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;overflow:hidden;margin-bottom:14px;}
-.cal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;cursor:pointer;user-select:none;background:var(--bg2);}
-.cal-title-row{display:flex;align-items:center;gap:8px;}
-.cal-title{font-size:14px;font-weight:500;color:var(--text);}
-.cal-toggle{font-size:11px;color:var(--muted);}
-.cal-nav{background:none;border:none;cursor:pointer;color:var(--text);font-size:18px;padding:2px 6px;font-weight:500;}
-.cal-body{padding:10px 12px 12px;}
+.cal-header{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;cursor:pointer;user-select:none;background:var(--bg2);}
+.cal-title{font-size:15px;font-weight:600;color:var(--text);}
+.cal-toggle{font-size:12px;color:var(--muted);}
+.cal-nav{background:none;border:none;cursor:pointer;color:var(--text);font-size:20px;padding:4px 8px;min-width:36px;min-height:36px;}
+.cal-body{padding:10px 12px 14px;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-.cal-dow{font-size:11px;color:var(--muted);text-align:center;padding:4px 0;font-weight:500;}
-.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;cursor:pointer;position:relative;color:var(--text);font-weight:500;}
+.cal-dow{font-size:11px;color:var(--muted);text-align:center;padding:4px 0;font-weight:600;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;cursor:pointer;position:relative;color:var(--text);font-weight:500;min-height:36px;}
 .cal-day.empty{pointer-events:none;}
-.cal-day.other{color:var(--hint);}
 .cal-day.partial{background:var(--green-light);color:var(--green-dark);}
 .cal-day.full{background:var(--green);color:white;}
 .cal-day.today-marker::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--amber);position:absolute;bottom:1px;}
 .cal-day.full.today-marker::after{background:white;}
 .cal-day.selected{outline:2.5px solid var(--green);outline-offset:1px;}
-
-/* Memo */
-.memo-card{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;padding:14px;}
-.memo-card textarea{width:100%;border:none;background:transparent;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;min-height:80px;line-height:1.7;}
+.memo-card{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;padding:14px;margin-bottom:14px;}
+.memo-user-label{font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px;}
+.memo-card textarea{width:100%;border:none;background:transparent;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;color:var(--text);resize:none;outline:none;min-height:80px;line-height:1.6;}
 .memo-card textarea::placeholder{color:var(--hint);}
 .memo-footer{display:flex;justify-content:flex-end;margin-top:8px;}
-
-/* Buttons */
-.btn{background:var(--card);border:1px solid var(--border-strong);border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-weight:500;}
+.btn{background:var(--card);border:1px solid var(--border-strong);border-radius:10px;padding:10px 18px;font-size:14px;cursor:pointer;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;min-height:44px;}
 .btn:active{opacity:.7;}
 .btn-green{background:var(--green);color:white;border-color:var(--green);}
-.btn-sm{padding:5px 12px;font-size:12px;}
-
+.btn-sm{padding:7px 14px;font-size:13px;min-height:36px;}
+.btn-icon{padding:8px 12px;font-size:18px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;}
+/* Routine editor */
+.routine-editor{margin-bottom:14px;}
+.routine-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--card);border:1px solid var(--border-strong);border-radius:12px;margin-bottom:8px;}
+.routine-item-info{flex:1;}
+.routine-item-name{font-size:14px;font-weight:500;color:var(--text);}
+.routine-item-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.routine-move{display:flex;flex-direction:column;gap:2px;}
+.routine-move button{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer;color:var(--muted);min-width:32px;min-height:28px;}
+.routine-del{background:var(--red-light);border:none;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;color:var(--red);min-width:36px;min-height:36px;}
+.add-routine-form{background:var(--card);border:1px solid var(--border-strong);border-radius:12px;padding:14px;margin-bottom:14px;}
+.add-routine-form input,.add-routine-form select{width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--bg2);color:var(--text);outline:none;margin-bottom:8px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;}
+.add-routine-form input:focus,.add-routine-form select:focus{border-color:var(--green);}
 /* Diet */
 .week-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;}
-.week-card{background:var(--card);border:1px solid var(--border-strong);border-radius:12px;padding:10px 12px;}
+.week-card{background:var(--card);border:1px solid var(--border-strong);border-radius:12px;padding:12px;}
 .week-card.today{border-color:var(--green);border-width:2px;}
-.week-day-label{font-size:11px;color:var(--muted);margin-bottom:3px;font-weight:500;}
-.week-menu{font-size:13px;font-weight:500;color:var(--text);}
-.week-detail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;}
+.week-day-label{font-size:11px;color:var(--muted);margin-bottom:3px;font-weight:600;}
+.week-menu{font-size:14px;font-weight:600;color:var(--text);}
+.week-detail{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5;}
 .today-meal-card{background:var(--green);border-radius:14px;padding:16px;margin-bottom:16px;}
-.today-meal-label{font-size:11px;color:rgba(255,255,255,0.75);margin-bottom:4px;font-weight:500;letter-spacing:.05em;}
-.today-meal-name{font-size:18px;font-weight:500;color:white;}
-.today-meal-detail{font-size:12px;color:rgba(255,255,255,0.8);margin-top:5px;line-height:1.6;}
-
-/* Grocery */
+.today-meal-label{font-size:11px;color:rgba(255,255,255,0.75);margin-bottom:4px;font-weight:600;letter-spacing:.05em;}
+.today-meal-name{font-size:19px;font-weight:600;color:white;}
+.today-meal-detail{font-size:13px;color:rgba(255,255,255,0.82);margin-top:5px;line-height:1.6;}
 .grocery-card{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;padding:14px;}
-.grocery-cat{font-size:11px;font-weight:600;color:var(--card);background:var(--green);padding:5px 10px;border-radius:6px;margin:14px 0 8px;letter-spacing:.06em;display:inline-block;}
+.grocery-cat{font-size:11px;font-weight:700;color:var(--card);background:var(--green);padding:4px 10px;border-radius:6px;margin:14px 0 8px;letter-spacing:.06em;display:inline-block;}
 .grocery-cat:first-child{margin-top:0;}
-.grocery-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.grocery-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);min-height:44px;}
 .grocery-item:last-child{border-bottom:none;}
-.g-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--border-strong);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.g-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border-strong);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .g-check.done{background:var(--green);border-color:var(--green);}
-.g-check.done::after{content:'✓';font-size:12px;color:white;font-weight:500;}
-.g-name{font-size:13px;color:var(--text);flex:1;font-weight:500;}
+.g-check.done::after{content:'✓';font-size:13px;color:white;font-weight:700;}
+.g-name{font-size:14px;color:var(--text);flex:1;font-weight:500;}
 .g-name.striked{text-decoration:line-through;color:var(--hint);}
-.g-qty{font-size:12px;color:var(--muted);font-weight:500;}
-.g-status{font-size:10px;padding:2px 7px;border-radius:99px;cursor:pointer;border:none;font-weight:500;white-space:nowrap;}
+.g-qty{font-size:12px;color:var(--muted);font-weight:500;margin-right:6px;}
+.g-status{font-size:12px;padding:4px 10px;border-radius:99px;cursor:pointer;border:none;font-weight:600;white-space:nowrap;min-height:30px;}
 .g-status.need{background:#FFE8CC;color:#7A3D00;}
 .g-status.have{background:#B8E8D4;color:#052E1F;}
-.g-status.bought{background:#E0E0E0;color:#888;}
-
+/* Weight */
+.who-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.who-tab{flex:1;padding:10px;border:1px solid var(--border-strong);border-radius:12px;font-size:15px;cursor:pointer;color:var(--muted);background:var(--card);font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;font-weight:600;min-height:44px;}
+.who-tab.active{background:var(--green);color:white;border-color:var(--green);}
+.weight-input-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.weight-input-row input{flex:1;border:1px solid var(--border-strong);border-radius:12px;padding:12px 14px;font-size:17px;font-family:'SF Mono','Courier New',monospace;background:var(--bg2);color:var(--text);outline:none;font-weight:500;min-height:48px;}
+.weight-input-row input:focus{border-color:var(--green);}
+.weight-unit{font-size:15px;color:var(--muted);font-weight:500;}
+.chart-wrap{height:130px;margin-bottom:14px;}
+.weight-log{max-height:220px;overflow-y:auto;}
+.weight-log-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;min-height:44px;}
+.weight-log-item:last-child{border-bottom:none;}
+.weight-del{color:var(--muted);cursor:pointer;font-size:12px;padding:6px 10px;border-radius:8px;min-height:32px;}
 /* Chat */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 160px);}
-.chat-messages{flex:1;overflow-y:auto;padding-bottom:10px;}
-.chat-bubble-wrap{display:flex;flex-direction:column;margin-bottom:12px;}
+.chat-wrap{display:flex;flex-direction:column;height:100%;}
+.chat-messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;}
+.chat-bubble-wrap{display:flex;flex-direction:column;margin-bottom:14px;}
 .chat-bubble-wrap.mine{align-items:flex-end;}
-.chat-bubble-wrap.other{align-items:flex-start;}
-.chat-bubble-wrap.ai{align-items:flex-start;}
-.chat-sender{font-size:11px;color:var(--muted);margin-bottom:3px;font-weight:500;padding:0 4px;}
-.chat-bubble{max-width:80%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.6;}
+.chat-bubble-wrap.other,.chat-bubble-wrap.ai{align-items:flex-start;}
+.chat-sender{font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600;padding:0 4px;}
+.chat-bubble{max-width:82%;padding:12px 15px;border-radius:18px;font-size:15px;line-height:1.6;}
 .chat-bubble.mine{background:var(--green);color:white;border-bottom-right-radius:4px;}
 .chat-bubble.other{background:var(--bg2);color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border);}
 .chat-bubble.ai{background:var(--card);color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border-strong);}
-.chat-time{font-size:10px;color:var(--hint);margin-top:3px;padding:0 4px;}
-.chat-input-wrap{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border);}
-.chat-input{flex:1;border:1px solid var(--border-strong);border-radius:12px;padding:10px 14px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg2);color:var(--text);outline:none;resize:none;max-height:100px;}
+.chat-time{font-size:11px;color:var(--hint);margin-top:4px;padding:0 4px;}
+.chat-input-wrap{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border);padding-bottom:4px;}
+.chat-input{flex:1;border:1px solid var(--border-strong);border-radius:22px;padding:12px 16px;font-size:15px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg2);color:var(--text);outline:none;resize:none;max-height:120px;line-height:1.4;}
 .chat-input:focus{border-color:var(--green);}
-.chat-send{background:var(--green);border:none;border-radius:12px;padding:10px 16px;color:white;font-size:14px;cursor:pointer;font-weight:500;white-space:nowrap;}
-.chat-send:disabled{opacity:0.5;}
-.chat-typing{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--card);border-radius:14px;border:1px solid var(--border-strong);max-width:80px;}
-.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;animation:bounce .8s infinite;}
+.chat-send{background:var(--green);border:none;border-radius:22px;padding:12px 18px;color:white;font-size:15px;cursor:pointer;font-weight:600;white-space:nowrap;min-height:48px;}
+.chat-send:disabled{opacity:0.4;}
+.chat-typing{display:flex;align-items:center;gap:5px;padding:12px 15px;background:var(--card);border-radius:18px;border:1px solid var(--border-strong);}
+.chat-typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);display:inline-block;animation:bounce .8s infinite;}
 .chat-typing span:nth-child(2){animation-delay:.15s;}
 .chat-typing span:nth-child(3){animation-delay:.3s;}
-/* Weight */
-.who-tabs{display:flex;gap:6px;margin-bottom:14px;}
-.who-tab{flex:1;padding:9px;border:1px solid var(--border-strong);border-radius:10px;font-size:13px;cursor:pointer;color:var(--muted);background:var(--card);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;text-align:center;font-weight:500;}
-.who-tab.active{background:var(--green);color:white;border-color:var(--green);}
-.weight-input-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.weight-input-row input{flex:1;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:16px;font-family:'SF Mono','Courier New',monospace;background:var(--bg2);color:var(--text);outline:none;font-weight:500;}
-.weight-input-row input:focus{border-color:var(--green);}
-.weight-unit{font-size:14px;color:var(--muted);font-weight:500;}
-.chart-wrap{height:120px;margin-bottom:14px;}
-.weight-log{max-height:200px;overflow-y:auto;}
-.weight-log-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
-.weight-log-item:last-child{border-bottom:none;}
-.weight-del{color:var(--muted);cursor:pointer;font-size:11px;padding:3px 8px;border-radius:6px;font-weight:500;}
-
 /* Settings */
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--border);}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border-bottom:1px solid var(--border);min-height:54px;}
 .setting-row:last-child{border-bottom:none;}
-.setting-label{font-size:14px;color:var(--text);font-weight:500;}
-.setting-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.setting-row input{width:100%;max-width:180px;border:1px solid var(--border-strong);border-radius:10px;padding:7px 10px;font-size:13px;font-family:'SF Mono','Courier New',monospace;background:var(--bg2);color:var(--text);outline:none;text-align:right;font-weight:500;}
+.setting-label{font-size:15px;color:var(--text);font-weight:500;}
+.setting-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.setting-row input{width:120px;border:1px solid var(--border-strong);border-radius:10px;padding:8px 12px;font-size:15px;font-family:'SF Mono','Courier New',monospace;background:var(--bg2);color:var(--text);outline:none;text-align:right;font-weight:500;min-height:44px;}
 .setting-row input:focus{border-color:var(--green);}
-
-/* AI */
-.ai-loading{display:flex;align-items:center;gap:8px;padding:16px;font-size:13px;color:var(--muted);}
+.ai-loading{display:flex;align-items:center;gap:8px;padding:16px;font-size:14px;color:var(--muted);}
 .dot-anim span{display:inline-block;animation:bounce .8s infinite;}
 .dot-anim span:nth-child(2){animation-delay:.15s;}
 .dot-anim span:nth-child(3){animation-delay:.3s;}
 @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
-.error-box{background:var(--red-light);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:12px;font-weight:500;}
-
+.error-box{background:var(--red-light);border-radius:12px;padding:12px 15px;font-size:14px;color:var(--red);margin-bottom:12px;font-weight:500;}
 /* Setup */
-.setup-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+.setup-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;padding-top:calc(var(--safe-top) + 24px);padding-bottom:calc(var(--safe-bottom) + 24px);}
 .setup-box{width:100%;max-width:440px;}
-.setup-title{font-size:22px;font-weight:500;margin-bottom:6px;color:var(--text);}
-.setup-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7;}
-.setup-input{width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:11px 12px;font-size:13px;font-family:'SF Mono','Courier New',monospace;background:var(--card);color:var(--text);outline:none;margin-bottom:8px;font-weight:500;}
+.setup-title{font-size:24px;font-weight:700;margin-bottom:6px;color:var(--text);}
+.setup-sub{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.setup-input{width:100%;border:1px solid var(--border-strong);border-radius:12px;padding:13px 14px;font-size:15px;font-family:'SF Mono','Courier New',monospace;background:var(--card);color:var(--text);outline:none;margin-bottom:8px;font-weight:500;min-height:48px;}
 .setup-input:focus{border-color:var(--green);}
-.setup-label{font-size:12px;color:var(--muted);margin-bottom:4px;margin-top:10px;font-weight:500;}
-.user-select-wrap{display:flex;gap:10px;margin-bottom:20px;}
-.user-btn{flex:1;padding:16px;border:2px solid var(--border-strong);border-radius:14px;background:var(--card);cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;text-align:center;}
+.setup-label{font-size:13px;color:var(--muted);margin-bottom:4px;margin-top:12px;font-weight:600;}
+.user-select-wrap{display:flex;gap:12px;margin-bottom:20px;}
+.user-btn{flex:1;padding:18px;border:2px solid var(--border-strong);border-radius:16px;background:var(--card);cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;min-height:80px;}
 .user-btn.selected{border-color:var(--green);background:var(--green-light);}
-.user-btn-name{font-size:18px;font-weight:500;color:var(--text);margin-bottom:4px;}
-.user-btn-sub{font-size:12px;color:var(--muted);}
-.user-btn.selected .user-btn-name{color:var(--green-dark);}
+.user-btn-name{font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.user-btn-sub{font-size:13px;color:var(--muted);}
+.user-btn.selected .user-btn-name,.user-btn.selected .user-btn-sub{color:var(--green-dark);}
 </style>
 </head>
 <body>
 
-<!-- Setup Overlay -->
 <div class="setup-overlay" id="setupOverlay">
   <div class="setup-box">
     <div class="setup-title">처음 설정</div>
     <div class="setup-sub">한 번만 입력하면 이 기기에 저장돼요.</div>
-
     <div class="sec-label" style="margin-bottom:10px;">나는 누구?</div>
     <div class="user-select-wrap">
       <div class="user-btn" id="userBtnDen" onclick="selectUser('den')">
@@ -220,7 +204,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
         <div class="user-btn-sub">점심 있음</div>
       </div>
     </div>
-
     <div class="sec-label" style="margin-bottom:10px;">Firebase 설정</div>
     <div class="setup-label">API Key</div>
     <input class="setup-input" id="fb_apiKey" placeholder="AIzaSy..."/>
@@ -230,22 +213,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <input class="setup-input" id="fb_databaseURL" placeholder="https://your-app-default-rtdb.firebaseio.com"/>
     <div class="setup-label">Project ID</div>
     <input class="setup-input" id="fb_projectId" placeholder="your-app"/>
-
     <div class="sec-label" style="margin-top:16px;margin-bottom:6px;">Anthropic API 키</div>
     <div class="setup-label">console.anthropic.com → API Keys</div>
     <input class="setup-input" id="fb_anthropicKey" placeholder="sk-ant-..."/>
-
-    <button class="btn btn-green" style="width:100%;margin-top:16px;padding:14px;font-size:15px;" id="saveFirebase">저장하고 시작하기</button>
-    <div id="setupError" style="margin-top:8px;font-size:12px;color:var(--red);font-weight:500;"></div>
+    <button class="btn btn-green" style="width:100%;margin-top:16px;padding:16px;font-size:16px;border-radius:14px;" id="saveFirebase">저장하고 시작하기</button>
+    <div id="setupError" style="margin-top:10px;font-size:13px;color:var(--red);font-weight:500;"></div>
   </div>
 </div>
 
 <div class="app" id="mainApp" style="display:none;">
   <div class="header">
-    <div>
+    <div class="header-left">
       <div class="header-title">건강 트래커</div>
       <div class="header-sub" id="headerSub">Den & 아키</div>
-      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:41</div>
+      <div class="header-ver">v05.31 09:00</div>
     </div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
@@ -254,127 +235,152 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     </div>
   </div>
 
-  <div id="tab-today" class="panel active">
-    <div style="height:16px;"></div>
-    <div class="cal-wrap">
-      <div class="cal-header" id="calToggleBtn">
-        <div class="cal-title-row">
-          <div class="cal-title" id="calTitle"></div>
-          <span class="cal-toggle" id="calToggleLabel">접기</span>
+  <div class="scroll-area">
+    <div id="tab-today" class="panel active">
+      <div class="cal-wrap">
+        <div class="cal-header" id="calToggleBtn">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="cal-title" id="calTitle"></div>
+            <span class="cal-toggle" id="calToggleLabel">접기</span>
+          </div>
+          <div style="display:flex;gap:2px;" onclick="event.stopPropagation();">
+            <button class="cal-nav" id="calPrev">‹</button>
+            <button class="cal-nav" id="calNext">›</button>
+          </div>
         </div>
-        <div style="display:flex;gap:2px;" onclick="event.stopPropagation();">
-          <button class="cal-nav" id="calPrev">‹</button>
-          <button class="cal-nav" id="calNext">›</button>
+        <div class="cal-body" id="calBody"><div class="cal-grid" id="calGrid"></div></div>
+      </div>
+      <div class="sec-label">오늘 루틴</div>
+      <div class="card" id="timelineList"></div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>오늘 달성률</span><span id="pctLabel">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+      <div class="sec-label">컨디션 메모</div>
+      <div class="memo-card">
+        <div class="memo-user-label" id="memoUserLabel">내 메모</div>
+        <textarea id="memoInput" placeholder="오늘 몸 상태, 느낀 점 자유롭게..."></textarea>
+        <div class="memo-footer"><button class="btn btn-sm btn-green" id="saveMemo">저장</button></div>
+      </div>
+      <div id="otherMemoWrap" style="display:none;">
+        <div class="memo-card" style="background:var(--bg2);">
+          <div class="memo-user-label" style="color:var(--muted);" id="otherMemoLabel">상대 메모</div>
+          <div id="otherMemoText" style="font-size:15px;color:var(--text);line-height:1.7;white-space:pre-wrap;min-height:24px;"></div>
         </div>
       </div>
-      <div class="cal-body" id="calBody">
-        <div class="cal-grid" id="calGrid"></div>
-      </div>
     </div>
-    <div class="sec-label">오늘 루틴</div>
-    <div class="card" id="timelineList"></div>
-    <div class="progress-wrap">
-      <div class="progress-label"><span>오늘 달성률</span><span id="pctLabel">0%</span></div>
-      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    </div>
-    <div class="sec-label">컨디션 메모</div>
-    <div class="memo-card" style="margin-bottom:10px;">
-      <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:6px;letter-spacing:.05em;" id="memoUserLabel">내 메모</div>
-      <textarea id="memoInput" placeholder="오늘 몸 상태, 느낀 점 자유롭게..."></textarea>
-      <div class="memo-footer"><button class="btn btn-sm btn-green" id="saveMemo">저장</button></div>
-    </div>
-    <div id="otherMemoWrap" style="display:none;">
-      <div class="memo-card" style="background:var(--bg2);">
-        <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.05em;" id="otherMemoLabel">상대 메모</div>
-        <div id="otherMemoText" style="font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap;min-height:24px;"></div>
-      </div>
-    </div>
-  </div>
 
-  <div id="tab-diet" class="panel">
-    <div style="height:16px;"></div>
-    <div class="sec-label">오늘 메뉴</div>
-    <div id="todayMeal"></div>
-    <div class="sec-label">이번 주 식단</div>
-    <div id="regenError"></div>
-    <div class="week-grid" id="weekGrid"></div>
-    <div class="sec-label">장보기 목록</div>
-    <div class="grocery-card" id="groceryList"></div>
-  </div>
+    <div id="tab-diet" class="panel">
+      <div class="sec-label">오늘 메뉴</div>
+      <div id="todayMeal"></div>
+      <div class="sec-label">이번 주 식단</div>
+      <div id="regenError"></div>
+      <div class="week-grid" id="weekGrid"></div>
+      <div class="sec-label">장보기 목록</div>
+      <div class="grocery-card" id="groceryList"></div>
+    </div>
 
-  <div id="tab-weight" class="panel">
-    <div style="height:16px;"></div>
-    <div class="who-tabs">
-      <button class="who-tab active" data-who="den">Den</button>
-      <button class="who-tab" data-who="aki">아키</button>
-    </div>
-    <div class="card" style="padding:14px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <span style="font-size:13px;color:var(--muted);font-weight:500;" id="weightGoalLabel"></span>
-        <span style="font-size:13px;color:var(--green);font-weight:500;" id="weightDiffLabel"></span>
+    <div id="tab-weight" class="panel">
+      <div class="who-tabs">
+        <button class="who-tab active" data-who="den">Den</button>
+        <button class="who-tab" data-who="aki">아키</button>
       </div>
-      <div class="weight-input-row">
-        <input type="number" id="weightInput" placeholder="오늘 체중" step="0.1" min="30" max="200"/>
-        <span class="weight-unit">kg</span>
-        <button class="btn btn-green btn-sm" id="saveWeight">추가</button>
+      <div class="card" style="padding:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-size:14px;color:var(--muted);font-weight:500;" id="weightGoalLabel"></span>
+          <span style="font-size:14px;color:var(--green);font-weight:600;" id="weightDiffLabel"></span>
+        </div>
+        <div class="weight-input-row">
+          <input type="number" id="weightInput" placeholder="오늘 체중" step="0.1" min="30" max="200" inputmode="decimal"/>
+          <span class="weight-unit">kg</span>
+          <button class="btn btn-green btn-sm" id="saveWeight">추가</button>
+        </div>
+        <div class="chart-wrap"><canvas id="wChart"></canvas></div>
+        <div class="weight-log" id="weightLog"></div>
       </div>
-      <div class="chart-wrap"><canvas id="wChart"></canvas></div>
-      <div class="weight-log" id="weightLog"></div>
     </div>
-  </div>
 
-  <div id="tab-chat" class="panel">
-    <div style="height:16px;"></div>
-    <div class="chat-wrap">
-      <div class="chat-messages" id="chatMessages"></div>
-      <div class="chat-input-wrap">
-        <textarea class="chat-input" id="chatInput" placeholder="건강·식단·운동 뭐든 물어봐요..." rows="1"></textarea>
-        <button class="chat-send" id="chatSend">전송</button>
+    <div id="tab-chat" class="panel" style="height:calc(100dvh - 200px);display:none;flex-direction:column;">
+      <div class="chat-wrap">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-wrap">
+          <textarea class="chat-input" id="chatInput" placeholder="건강·식단·운동 뭐든 물어봐요..." rows="1"></textarea>
+          <button class="chat-send" id="chatSend">전송</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div id="tab-settings" class="panel">
-    <div style="height:16px;"></div>
-    <div class="sec-label">현재 사용자</div>
-    <div class="card">
-      <div class="setting-row">
-        <div><div class="setting-label" id="currentUserLabel">-</div><div class="setting-sub">이 기기의 사용자</div></div>
-        <button class="btn btn-sm" id="switchUser">변경</button>
+    <div id="tab-routine" class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="sec-label" style="margin:0;">내 루틴 편집</div>
+        <button class="btn btn-sm" id="addRoutineToggle">+ 추가</button>
       </div>
+      <div id="addRoutineForm" style="display:none;" class="add-routine-form">
+        <div class="setup-label">항목 이름</div>
+        <input id="newRoutineName" placeholder="예: 저녁 산책"/>
+        <div class="setup-label">설명 (선택)</div>
+        <input id="newRoutineSub" placeholder="예: 30분, 경복궁"/>
+        <div class="setup-label">시간대</div>
+        <select id="newRoutineGroup">
+          <option>🌅 기상 직후</option>
+          <option>🏃 아침 운동</option>
+          <option>🥗 점심 식사</option>
+          <option>🍽 저녁 식사</option>
+          <option>💊 저녁 식사 직후</option>
+          <option>🌙 취침 30분 전</option>
+        </select>
+        <div class="setup-label">대상</div>
+        <select id="newRoutineWho">
+          <option value="">공용</option>
+          <option value="Den">Den</option>
+          <option value="아키">아키</option>
+        </select>
+        <button class="btn btn-green" style="width:100%;margin-top:4px;" id="addRoutineBtn">추가하기</button>
+      </div>
+      <div class="routine-editor" id="routineEditor"></div>
     </div>
-    <div class="sec-label">Den 목표 체중</div>
-    <div class="card">
-      <div class="setting-row">
-        <div><div class="setting-label">현재 체중</div><div class="setting-sub">처음 한 번만</div></div>
-        <input type="number" id="settingDenCurrent" placeholder="kg" step="0.1"/>
+
+    <div id="tab-settings" class="panel">
+      <div class="sec-label">현재 사용자</div>
+      <div class="card">
+        <div class="setting-row">
+          <div><div class="setting-label" id="currentUserLabel">-</div><div class="setting-sub">이 기기의 사용자</div></div>
+          <button class="btn btn-sm" id="switchUser">변경</button>
+        </div>
       </div>
-      <div class="setting-row">
-        <div><div class="setting-label">목표 체중</div></div>
-        <input type="number" id="settingDenGoal" placeholder="kg" step="0.1"/>
+      <div class="sec-label">Den 목표 체중</div>
+      <div class="card">
+        <div class="setting-row">
+          <div><div class="setting-label">현재 체중</div><div class="setting-sub">처음 한 번만</div></div>
+          <input type="number" id="settingDenCurrent" placeholder="kg" step="0.1" inputmode="decimal"/>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">목표 체중</div></div>
+          <input type="number" id="settingDenGoal" placeholder="kg" step="0.1" inputmode="decimal"/>
+        </div>
       </div>
+      <div class="sec-label">아키 목표 체중</div>
+      <div class="card">
+        <div class="setting-row">
+          <div><div class="setting-label">현재 체중</div><div class="setting-sub">처음 한 번만</div></div>
+          <input type="number" id="settingAkiCurrent" placeholder="kg" step="0.1" inputmode="decimal"/>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">목표 체중</div></div>
+          <input type="number" id="settingAkiGoal" placeholder="kg" step="0.1" inputmode="decimal"/>
+        </div>
+      </div>
+      <button class="btn btn-green" id="saveSettings" style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;">설정 저장</button>
+      <div class="sec-label">앱 버전</div>
+      <div class="card">
+        <div class="setting-row">
+          <div><div class="setting-label">현재 버전</div><div class="setting-sub" id="currentVerLabel">v05.31 09:00</div></div>
+          <button class="btn btn-sm btn-green" id="checkUpdate">업데이트 확인</button>
+        </div>
+      </div>
+      <div class="sec-label">초기화</div>
+      <button class="btn" id="resetFirebase" style="width:100%;padding:14px;border-radius:14px;">Firebase / API 키 재설정</button>
     </div>
-    <div class="sec-label">아키 목표 체중</div>
-    <div class="card">
-      <div class="setting-row">
-        <div><div class="setting-label">현재 체중</div><div class="setting-sub">처음 한 번만</div></div>
-        <input type="number" id="settingAkiCurrent" placeholder="kg" step="0.1"/>
-      </div>
-      <div class="setting-row">
-        <div><div class="setting-label">목표 체중</div></div>
-        <input type="number" id="settingAkiGoal" placeholder="kg" step="0.1"/>
-      </div>
-    </div>
-    <button class="btn btn-green" id="saveSettings" style="width:100%;padding:12px;margin-bottom:14px;">설정 저장</button>
-    <div class="sec-label">앱 버전</div>
-    <div class="card">
-      <div class="setting-row">
-        <div><div class="setting-label">현재 버전</div><div class="setting-sub" id="currentVerLabel">v05.31 08:41</div></div>
-        <button class="btn btn-green btn-sm" id="checkUpdate">업데이트 확인</button>
-      </div>
-    </div>
-    <div class="sec-label">Firebase / API 재설정</div>
-    <button class="btn" id="resetFirebase" style="width:100%;padding:12px;">초기화 (주의: 다시 입력해야 해요)</button>
   </div>
 
   <nav class="bottom-nav">
@@ -382,6 +388,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <button class="nav-item" data-tab="diet"><span class="nav-icon">🥗</span>식단</button>
     <button class="nav-item" data-tab="weight"><span class="nav-icon">⚖</span>체중</button>
     <button class="nav-item" data-tab="chat"><span class="nav-icon">💬</span>건강</button>
+    <button class="nav-item" data-tab="routine"><span class="nav-icon">✏️</span>루틴</button>
     <button class="nav-item" data-tab="settings"><span class="nav-icon">⚙</span>설정</button>
   </nav>
 </div>
@@ -391,28 +398,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
 import{getDatabase,ref,set,get,onValue}from'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
 
-// Den 루틴
-const TIMELINE_DEN=[
-  {group:'🌅 기상 직후',items:[{id:'pro',name:'프로바이오틱스',sub:'Jarrow · 공복 복용',who:'공용'}]},
-  {group:'🏃 아침 운동',items:[{id:'exercise',name:'운동',sub:'경복궁 방향 30분 걷기',who:''}]},
-  {group:'🍽 저녁 식사',items:[{id:'diet_check',name:'저녁 식단',sub:'저탄고지 · 밥 생략 or 반 공기',who:''}]},
-  {group:'💊 저녁 식사 직후',items:[
-    {id:'d3k2',name:'비타민 D3+K2',sub:'Thorne · 지용성, 식후 흡수↑',who:'Den'},
-    {id:'omega',name:'오메가3',sub:'Carlson Labs · 식후 복용',who:'공용'},
-  ]},
-  {group:'🌙 취침 30분 전',items:[{id:'mag',name:'마그네슘',sub:'Thorne · 수면 개선',who:'Den'}]},
+const DEFAULT_TIMELINE_DEN=[
+  {id:'pro',name:'프로바이오틱스',sub:'Jarrow · 공복 복용',who:'공용',group:'🌅 기상 직후'},
+  {id:'exercise',name:'운동',sub:'경복궁 방향 30분 걷기',who:'',group:'🏃 아침 운동'},
+  {id:'diet_check',name:'저녁 식단',sub:'저탄고지 · 밥 생략 or 반 공기',who:'',group:'🍽 저녁 식사'},
+  {id:'d3k2',name:'비타민 D3+K2',sub:'Thorne · 식후 복용',who:'Den',group:'💊 저녁 식사 직후'},
+  {id:'omega',name:'오메가3',sub:'Carlson Labs · 식후 복용',who:'공용',group:'💊 저녁 식사 직후'},
+  {id:'mag',name:'마그네슘',sub:'Thorne · 수면 개선',who:'Den',group:'🌙 취침 30분 전'},
 ];
-
-// 아키 루틴 (점심 추가)
-const TIMELINE_AKI=[
-  {group:'🌅 기상 직후',items:[{id:'pro',name:'프로바이오틱스',sub:'Jarrow · 공복 복용',who:'공용'}]},
-  {group:'🏃 아침 운동',items:[{id:'exercise',name:'운동',sub:'30분 걷기',who:''}]},
-  {group:'🥗 점심 식사',items:[{id:'lunch_check',name:'점심 식단',sub:'균형 잡힌 점심',who:'아키'}]},
-  {group:'🍽 저녁 식사',items:[{id:'diet_check',name:'저녁 식단',sub:'저탄고지 · 밥 소량',who:''}]},
-  {group:'💊 저녁 식사 직후',items:[{id:'omega',name:'오메가3',sub:'Carlson Labs · 식후 복용',who:'공용'}]},
-  {group:'🌙 취침 30분 전',items:[{id:'mag_aki',name:'마그네슘',sub:'취침 전 수면 개선',who:'아키'}]},
+const DEFAULT_TIMELINE_AKI=[
+  {id:'pro',name:'프로바이오틱스',sub:'Jarrow · 공복 복용',who:'공용',group:'🌅 기상 직후'},
+  {id:'exercise',name:'운동',sub:'30분 걷기',who:'',group:'🏃 아침 운동'},
+  {id:'lunch_check',name:'점심 식단',sub:'균형 잡힌 점심',who:'아키',group:'🥗 점심 식사'},
+  {id:'diet_check',name:'저녁 식단',sub:'저탄고지 · 밥 소량',who:'',group:'🍽 저녁 식사'},
+  {id:'omega',name:'오메가3',sub:'Carlson Labs · 식후 복용',who:'공용',group:'💊 저녁 식사 직후'},
+  {id:'mag_aki',name:'마그네슘',sub:'취침 전 수면 개선',who:'아키',group:'🌙 취침 30분 전'},
 ];
-
 const DEFAULT_MEALS=[
   {day:'월',menu:'삼겹살 쌈',detail:'상추·깻잎·쌈장 / 된장찌개'},
   {day:'화',menu:'계란찜 + 버터 볶음채소',detail:'계란 3~4개 / 브로콜리·버섯'},
@@ -422,28 +423,21 @@ const DEFAULT_MEALS=[
   {day:'토',menu:'자유식',detail:'탄수화물 완화 / 폭식 없이'},
   {day:'일',menu:'계란 + 아보카도 + 채소',detail:'간단하게'},
 ];
-const DEFAULT_GROCERY={
-  '고기·단백질':['삼겹살 600g','목살 400g','소고기(불고기용) 300g','계란 1판','두부 2모'],
-  '채소':['상추 1봉','깻잎 1봉','브로콜리 1개','버섯 1봉','시금치 1봉','콩나물 1봉','아보카도 2개'],
-  '양념·기타':['된장','쌈장','들기름','배즙','간장'],
-};
+const DEFAULT_GROCERY={'고기·단백질':['삼겹살 600g','목살 400g','소고기(불고기용) 300g','계란 1판','두부 2모'],'채소·나물':['상추 1봉','깻잎 1봉','브로콜리 1개','버섯 1봉','시금치 1봉','콩나물 1봉','아보카도 2개'],'양념·기타':['된장','쌈장','들기름','배즙','간장']};
 
-let db=null,currentDate=todayStr(),activeWho='den',calYear,calMonth,calOpen=true;
-let currentUser='den'; // 이 기기의 사용자
-let selectedUserInSetup='den';
-let state={days:{},settings:{den:{current:null,goal:null},aki:{current:null,goal:null}},meals:[...DEFAULT_MEALS],grocery:{...DEFAULT_GROCERY},groceryChecks:{},groceryStatus:{}};
+let db=null,currentDate=todayStr(),activeWho='den',calYear,calMonth,calOpen=true,currentUser='den',selectedUserInSetup='den';
+let state={days:{},settings:{den:{current:null,goal:null},aki:{current:null,goal:null}},meals:[...DEFAULT_MEALS],grocery:{...DEFAULT_GROCERY},groceryChecks:{},groceryStatus:{},chatMessages:[],routineDen:[...DEFAULT_TIMELINE_DEN],routineAki:[...DEFAULT_TIMELINE_AKI]};
 
 function todayStr(){return new Date().toISOString().slice(0,10);}
 function fmtDate(s){const d=new Date(s+'T00:00:00');return`${d.getMonth()+1}/${d.getDate()}(${['일','월','화','수','목','금','토'][d.getDay()]})`;}
 function shiftDate(s,n){const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
 function todayDayIdx(){return new Date().getDay();}
 function dayKorToIdx(k){return['일','월','화','수','목','금','토'].indexOf(k);}
-
 function getCfg(){try{return JSON.parse(localStorage.getItem('ht_cfg_v2'));}catch(e){return null;}}
 function saveCfg(c){localStorage.setItem('ht_cfg_v2',JSON.stringify(c));}
 function getAnthropicKey(){return getCfg()?.anthropicKey||'';}
-function getTimeline(){return currentUser==='aki'?TIMELINE_AKI:TIMELINE_DEN;}
-function getAllItems(){return getTimeline().flatMap(g=>g.items);}
+function getTimeline(){return currentUser==='aki'?(state.routineAki||DEFAULT_TIMELINE_AKI):(state.routineDen||DEFAULT_TIMELINE_DEN);}
+function getAllItems(){return getTimeline();}
 
 window.selectUser=function(who){
   selectedUserInSetup=who;
@@ -460,7 +454,7 @@ async function initFirebase(){
     const app=initializeApp({apiKey:cfg.apiKey,authDomain:cfg.authDomain,databaseURL:cfg.databaseURL,projectId:cfg.projectId});
     db=getDatabase(app);
     document.getElementById('setupOverlay').style.display='none';
-    document.getElementById('mainApp').style.display='block';
+    document.getElementById('mainApp').style.display='flex';
     await loadFromFirebase();
     const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();
     renderAll();listenFirebase();
@@ -472,25 +466,11 @@ function showSetup(err=''){
   document.getElementById('mainApp').style.display='none';
   if(err)document.getElementById('setupError').textContent=err;
   const cfg=getCfg();
-  if(cfg){
-    document.getElementById('fb_apiKey').value=cfg.apiKey||'';
-    document.getElementById('fb_authDomain').value=cfg.authDomain||'';
-    document.getElementById('fb_databaseURL').value=cfg.databaseURL||'';
-    document.getElementById('fb_projectId').value=cfg.projectId||'';
-    document.getElementById('fb_anthropicKey').value=cfg.anthropicKey||'';
-    selectUser(cfg.user||'den');
-  }
+  if(cfg){['apiKey','authDomain','databaseURL','projectId','anthropicKey'].forEach(k=>{const el=document.getElementById('fb_'+k);if(el)el.value=cfg[k]||'';});selectUser(cfg.user||'den');}
 }
 
 document.getElementById('saveFirebase').onclick=async()=>{
-  const cfg={
-    user:selectedUserInSetup,
-    apiKey:document.getElementById('fb_apiKey').value.trim(),
-    authDomain:document.getElementById('fb_authDomain').value.trim(),
-    databaseURL:document.getElementById('fb_databaseURL').value.trim(),
-    projectId:document.getElementById('fb_projectId').value.trim(),
-    anthropicKey:document.getElementById('fb_anthropicKey').value.trim(),
-  };
+  const cfg={user:selectedUserInSetup,apiKey:document.getElementById('fb_apiKey').value.trim(),authDomain:document.getElementById('fb_authDomain').value.trim(),databaseURL:document.getElementById('fb_databaseURL').value.trim(),projectId:document.getElementById('fb_projectId').value.trim(),anthropicKey:document.getElementById('fb_anthropicKey').value.trim()};
   if(!cfg.apiKey||!cfg.databaseURL){document.getElementById('setupError').textContent='API Key와 Database URL은 필수예요.';return;}
   if(!cfg.anthropicKey){document.getElementById('setupError').textContent='Anthropic API 키를 입력해주세요.';return;}
   saveCfg(cfg);location.reload();
@@ -501,16 +481,14 @@ async function loadFromFirebase(){
   if(snap.exists()){
     const d=snap.val();
     if(d.days)state.days=d.days;
-    if(d.settings){
-      state.settings=d.settings;
-      if(!state.settings.den)state.settings.den={current:null,goal:null};
-      if(!state.settings.aki)state.settings.aki={current:null,goal:null};
-    }
+    if(d.settings){state.settings=d.settings;if(!state.settings.den)state.settings.den={};if(!state.settings.aki)state.settings.aki={};}
     if(d.meals)state.meals=d.meals;
     if(d.grocery)state.grocery=d.grocery;
     if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
     if(d.groceryStatus)state.groceryStatus=d.groceryStatus;
     if(d.chatMessages)state.chatMessages=d.chatMessages;
+    if(d.routineDen)state.routineDen=d.routineDen;
+    if(d.routineAki)state.routineAki=d.routineAki;
   }
 }
 function listenFirebase(){
@@ -518,38 +496,27 @@ function listenFirebase(){
     if(!snap.exists())return;
     const d=snap.val();
     if(d.days)state.days=d.days;
-    if(d.settings){
-      state.settings=d.settings;
-      if(!state.settings.den)state.settings.den={current:null,goal:null};
-      if(!state.settings.aki)state.settings.aki={current:null,goal:null};
-    }
+    if(d.settings){state.settings=d.settings;if(!state.settings.den)state.settings.den={};if(!state.settings.aki)state.settings.aki={};}
     if(d.meals)state.meals=d.meals;
     if(d.grocery)state.grocery=d.grocery;
     if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
     if(d.groceryStatus)state.groceryStatus=d.groceryStatus;
     if(d.chatMessages)state.chatMessages=d.chatMessages;
+    if(d.routineDen)state.routineDen=d.routineDen;
+    if(d.routineAki)state.routineAki=d.routineAki;
     renderAll();
   });
 }
 async function saveState(){if(!db)return;await set(ref(db,'ht'),state);}
-function getDay(d){
-  if(!state.days[d])state.days[d]={checks:{},memo:''};
-  if(!state.days[d].checks)state.days[d].checks={};
-  return state.days[d];
-}
-function getDayScore(d){
-  const day=state.days[d];if(!day||!day.checks)return 0;
-  return getAllItems().filter(x=>day.checks[x.id]).length;
-}
-const TOTAL_ITEMS=()=>getAllItems().length;
+function getDay(d){if(!state.days[d])state.days[d]={checks:{},memo:''};if(!state.days[d].checks)state.days[d].checks={};return state.days[d];}
+function getDayScore(d){const day=state.days[d];if(!day||!day.checks)return 0;return getAllItems().filter(x=>day.checks[x.id]).length;}
 
 function renderAll(){
-  const cfg=getCfg();
-  currentUser=cfg?.user||'den';
+  const cfg=getCfg();currentUser=cfg?.user||'den';
   document.getElementById('headerSub').textContent=currentUser==='den'?'Den 모드':'아키 모드';
   document.getElementById('currentUserLabel').textContent=currentUser==='den'?'Den':'아키';
   renderDate();renderCalendar();renderTimeline();renderMemo();
-  renderWeek();renderGrocery();renderSettings();renderWeightPanel();renderChat();
+  renderWeek();renderGrocery();renderSettings();renderWeightPanel();renderRoutineEditor();
 }
 function renderDate(){document.getElementById('dateStr').textContent=fmtDate(currentDate);}
 
@@ -559,21 +526,17 @@ function renderCalendar(){
   document.getElementById('calToggleLabel').textContent=calOpen?'접기':'펼치기';
   document.getElementById('calBody').style.display=calOpen?'block':'none';
   const grid=document.getElementById('calGrid');grid.innerHTML='';
-  ['일','월','화','수','목','금','토'].forEach(d=>{
-    const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);
-  });
+  ['일','월','화','수','목','금','토'].forEach(d=>{const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);});
   const first=new Date(calYear,calMonth,1).getDay();
   const days=new Date(calYear,calMonth+1,0).getDate();
-  const today=todayStr();
+  const today=todayStr();const total=getAllItems().length;
   for(let i=0;i<first;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
   for(let d=1;d<=days;d++){
     const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const score=getDayScore(ds);const total=TOTAL_ITEMS();
+    const score=getDayScore(ds);
     let cls='cal-day';
-    if(score===total&&total>0)cls+=' full';
-    else if(score>0)cls+=' partial';
-    if(ds===today)cls+=' today-marker';
-    if(ds===currentDate)cls+=' selected';
+    if(score===total&&total>0)cls+=' full';else if(score>0)cls+=' partial';
+    if(ds===today)cls+=' today-marker';if(ds===currentDate)cls+=' selected';
     const el=document.createElement('div');el.className=cls;el.textContent=d;
     el.onclick=()=>{currentDate=ds;renderDate();renderTimeline();renderMemo();renderCalendar();};
     grid.appendChild(el);
@@ -586,26 +549,24 @@ document.getElementById('calNext').onclick=(e)=>{e.stopPropagation();calMonth++;
 function renderTimeline(){
   const day=getDay(currentDate);
   const el=document.getElementById('timelineList');el.innerHTML='';
-  getTimeline().forEach(group=>{
-    const groupLabel=document.createElement('div');
-    groupLabel.className='time-group-label';
-    groupLabel.innerHTML=`${group.group}`;
-    el.appendChild(groupLabel);
-    group.items.forEach(item=>{
+  const timeline=getTimeline();
+  const groups=[...new Set(timeline.map(i=>i.group))];
+  groups.forEach(group=>{
+    const groupItems=timeline.filter(i=>i.group===group);
+    const gl=document.createElement('div');gl.className='time-group-label';gl.textContent=group;el.appendChild(gl);
+    groupItems.forEach(item=>{
       const done=!!day.checks[item.id];
       const row=document.createElement('div');row.className='check-row';
       const badge=item.who?`<span class="who-badge">${item.who}</span>`:'';
       row.innerHTML=`<div class="check-left"><div class="check-icon${done?' done':''}"></div><div><div class="check-name">${item.name}</div><div class="check-sub">${item.sub}</div></div></div>${badge}`;
-      row.onclick=()=>toggle(item.id);
-      el.appendChild(row);
+      row.onclick=()=>toggle(item.id);el.appendChild(row);
     });
   });
   renderProgress();
 }
 async function toggle(id){const day=getDay(currentDate);day.checks[id]=!day.checks[id];await saveState();renderTimeline();renderCalendar();}
 function renderProgress(){
-  const day=getDay(currentDate);
-  const total=TOTAL_ITEMS();
+  const day=getDay(currentDate);const total=getAllItems().length;
   const done=getAllItems().filter(i=>day.checks&&day.checks[i.id]).length;
   const pct=Math.round(done/total*100);
   document.getElementById('pctLabel').textContent=pct+'%';
@@ -613,31 +574,75 @@ function renderProgress(){
 }
 function renderMemo(){
   const day=getDay(currentDate);
-  const myKey=currentUser+'_memo';
-  const otherUser=currentUser==='den'?'aki':'den';
-  const otherKey=otherUser+'_memo';
-  const otherName=otherUser==='den'?'Den':'아키';
-  const myName=currentUser==='den'?'Den':'아키';
+  const myKey=currentUser+'_memo';const otherUser=currentUser==='den'?'aki':'den';const otherKey=otherUser+'_memo';
   document.getElementById('memoInput').value=day[myKey]||'';
-  document.getElementById('memoUserLabel').textContent=myName+' 메모';
-  const otherMemo=day[otherKey]||'';
-  const otherWrap=document.getElementById('otherMemoWrap');
-  if(otherMemo){
-    otherWrap.style.display='block';
-    document.getElementById('otherMemoLabel').textContent=otherName+' 메모';
-    document.getElementById('otherMemoText').textContent=otherMemo;
-  } else {
-    otherWrap.style.display='none';
-  }
+  document.getElementById('memoUserLabel').textContent=(currentUser==='den'?'Den':'아키')+' 메모';
+  const otherMemo=day[otherKey]||'';const wrap=document.getElementById('otherMemoWrap');
+  if(otherMemo){wrap.style.display='block';document.getElementById('otherMemoLabel').textContent=(otherUser==='den'?'Den':'아키')+' 메모';document.getElementById('otherMemoText').textContent=otherMemo;}
+  else{wrap.style.display='none';}
 }
+
+// Routine editor
+function renderRoutineEditor(){
+  const timeline=getTimeline();
+  const el=document.getElementById('routineEditor');el.innerHTML='';
+  timeline.forEach((item,idx)=>{
+    const div=document.createElement('div');div.className='routine-item';
+    div.innerHTML=`
+      <div class="routine-item-info">
+        <div class="routine-item-name">${item.name}</div>
+        <div class="routine-item-sub">${item.group}${item.who?' · '+item.who:''}</div>
+      </div>
+      <div class="routine-move">
+        <button onclick="moveRoutine(${idx},-1)" ${idx===0?'disabled':''}>↑</button>
+        <button onclick="moveRoutine(${idx},1)" ${idx===timeline.length-1?'disabled':''}>↓</button>
+      </div>
+      <button class="routine-del" onclick="deleteRoutine(${idx})">✕</button>`;
+    el.appendChild(div);
+  });
+}
+window.moveRoutine=async function(idx,dir){
+  const key=currentUser==='aki'?'routineAki':'routineDen';
+  const arr=[...state[key]];const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=arr.length)return;
+  [arr[idx],arr[newIdx]]=[arr[newIdx],arr[idx]];
+  state[key]=arr;await saveState();renderRoutineEditor();renderTimeline();
+};
+window.deleteRoutine=async function(idx){
+  const key=currentUser==='aki'?'routineAki':'routineDen';
+  if(!confirm('이 루틴을 삭제할까요?'))return;
+  state[key]=state[key].filter((_,i)=>i!==idx);
+  await saveState();renderRoutineEditor();renderTimeline();
+};
+document.getElementById('addRoutineToggle').onclick=()=>{
+  const f=document.getElementById('addRoutineForm');
+  f.style.display=f.style.display==='none'?'block':'none';
+};
+document.getElementById('addRoutineBtn').onclick=async()=>{
+  const name=document.getElementById('newRoutineName').value.trim();
+  if(!name)return;
+  const newItem={
+    id:'custom_'+Date.now(),
+    name,
+    sub:document.getElementById('newRoutineSub').value.trim(),
+    group:document.getElementById('newRoutineGroup').value,
+    who:document.getElementById('newRoutineWho').value,
+  };
+  const key=currentUser==='aki'?'routineAki':'routineDen';
+  state[key]=[...state[key],newItem];
+  await saveState();
+  document.getElementById('addRoutineForm').style.display='none';
+  document.getElementById('newRoutineName').value='';
+  document.getElementById('newRoutineSub').value='';
+  renderRoutineEditor();renderTimeline();
+};
 
 function renderWeek(){
   const grid=document.getElementById('weekGrid');grid.innerHTML='';
   const todayIdx=todayDayIdx();
   state.meals.forEach((m,idx)=>{
     const dayIdx=dayKorToIdx(m.day);
-    const card=document.createElement('div');
-    card.className='week-card'+(dayIdx===todayIdx?' today':'');
+    const card=document.createElement('div');card.className='week-card'+(dayIdx===todayIdx?' today':'');
     card.innerHTML=`<div class="week-day-label">${m.day}요일${dayIdx===todayIdx?' · 오늘':''}</div><div class="week-menu">${m.menu}</div><div class="week-detail">${m.detail}</div>`;
     grid.appendChild(card);
   });
@@ -647,14 +652,13 @@ function renderTodayMeal(){
   const todayIdx=todayDayIdx();
   const meal=state.meals.find(m=>dayKorToIdx(m.day)===todayIdx)||state.meals[0];
   const mealIdx=state.meals.findIndex(m=>dayKorToIdx(m.day)===todayIdx);
-  document.getElementById('todayMeal').innerHTML=`<div class="today-meal-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="today-meal-label">오늘 저녁</div><div class="today-meal-name">${meal.menu}</div><div class="today-meal-detail">${meal.detail}</div></div><button onclick="regenToday(${mealIdx})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:8px;padding:6px 11px;font-size:11px;color:white;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;white-space:nowrap;margin-left:8px;font-weight:500;">갱신 ↗</button></div></div>`;
+  document.getElementById('todayMeal').innerHTML=`<div class="today-meal-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="today-meal-label">오늘 저녁</div><div class="today-meal-name">${meal.menu}</div><div class="today-meal-detail">${meal.detail}</div></div><button onclick="regenToday(${mealIdx})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:10px;padding:8px 14px;font-size:13px;color:white;cursor:pointer;white-space:nowrap;margin-left:10px;font-weight:600;min-height:40px;">갱신 ↗</button></div></div>`;
 }
 function renderGrocery(){
   const el=document.getElementById('groceryList');el.innerHTML='';
   if(!state.groceryStatus)state.groceryStatus={};
   if(!state.groceryChecks)state.groceryChecks={};
-  // 순서: 사야함 → 있음 → 구매완료
-  const ORDER={need:0,have:1,bought:2};
+  const ORDER={need:0,have:1};
   Object.entries(state.grocery).forEach(([cat,items])=>{
     const catEl=document.createElement('div');catEl.className='grocery-cat';catEl.textContent=cat;el.appendChild(catEl);
     const indexed=items.map((item,i)=>({item,key:cat+'_'+i}));
@@ -664,41 +668,21 @@ function renderGrocery(){
       return sa-sb;
     });
     indexed.forEach(({item,key})=>{
-      const bought=!!state.groceryChecks[key];
-      const status=state.groceryStatus[key]||'need';
-      const match=item.match(/^(.+?)\s+(\S+)$/);
-      const name=match?match[1]:item;const qty=match?match[2]:'';
-      const row=document.createElement('div');row.className='grocery-item';
+      const bought=!!state.groceryChecks[key];const status=state.groceryStatus[key]||'need';
+      const match=item.match(/^(.+?)\s+(\S+)$/);const name=match?match[1]:item;const qty=match?match[2]:'';
       const faded=bought||status==='have';
+      const row=document.createElement('div');row.className='grocery-item';
       if(faded)row.style.opacity='0.4';
-      const statusLabel=status==='have'?'있음':'사야함';
-      const statusClass=status==='have'?'have':'need';
-      row.innerHTML=`
-        <div class="g-check${bought?' done':''}" data-key="${key}"></div>
-        <span class="g-name${faded?' striked':''}" style="flex:1;">${name}</span>
-        <span class="g-qty" style="margin-right:6px;">${qty}</span>
-        <button class="g-status ${statusClass}" data-key="${key}">${statusLabel}</button>`;
-      row.querySelector('.g-check').onclick=async()=>{
-        state.groceryChecks[key]=!state.groceryChecks[key];
-        await saveState();renderGrocery();
-      };
-      row.querySelector('.g-status').onclick=async(e)=>{
-        e.stopPropagation();
-        state.groceryStatus[key]=status==='have'?'need':'have';
-        await saveState();renderGrocery();
-      };
+      row.innerHTML=`<div class="g-check${bought?' done':''}" data-key="${key}"></div><span class="g-name${faded?' striked':''}">${name}</span><span class="g-qty">${qty}</span><button class="g-status ${status}" data-key="${key}">${status==='have'?'있음':'사야함'}</button>`;
+      row.querySelector('.g-check').onclick=async()=>{state.groceryChecks[key]=!state.groceryChecks[key];await saveState();renderGrocery();};
+      row.querySelector('.g-status').onclick=async(e)=>{e.stopPropagation();state.groceryStatus[key]=status==='have'?'need':'have';await saveState();renderGrocery();};
       el.appendChild(row);
     });
   });
 }
 
 async function callAI(prompt){
-  const key=getAnthropicKey();
-  const resp=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:600,messages:[{role:'user',content:prompt}]})
-  });
+  const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getAnthropicKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:600,messages:[{role:'user',content:prompt}]})});
   if(!resp.ok)throw new Error(await resp.text());
   const d=await resp.json();
   return d.content.filter(c=>c.type==='text').map(c=>c.text).join('').replace(/```json|```/g,'').trim();
@@ -710,88 +694,89 @@ window.regenToday=async function(idx){
   if(btn){btn.disabled=true;btn.textContent='생성 중...';}
   document.getElementById('regenError').innerHTML='';
   try{
-    const meal=state.meals[idx];
-    const otherMenus=state.meals.filter((_,i)=>i!==idx).map(m=>m.menu).join(', ');
-    // Force completely different category
-const categories=[
-  {main:'해산물·생선',examples:'고등어구이, 연어스테이크, 오징어볶음, 낙지볶음, 쭈꾸미볶음, 새우볶음, 꽁치구이'},
-  {main:'닭고기',examples:'닭갈비, 닭볶음탕, 닭가슴살구이, 허브치킨, 간장닭조림'},
-  {main:'소고기',examples:'차돌박이숙주볶음, 소고기미역국, 갈비찜, 소고기볶음, 육전'},
-  {main:'돼지고기찌개·조림',examples:'김치찌개+삼겹살, 된장찌개+목살, 부대찌개, 제육볶음, 돼지갈비찜'},
-  {main:'계란·두부',examples:'계란찜+제육, 두부김치, 순두부찌개, 두부조림+삼겹살, 스크램블에그+베이컨'},
-  {main:'훈제·가공육',examples:'훈제오리볶음, 베이컨야채볶음, 소시지볶음, 햄계란볶음'},
-];
-// 현재 메뉴에서 쓴 재료 파악해서 다른 카테고리 선택
-const usedMains=otherMenus+meal.menu;
-const available=categories.filter(c=>!usedMains.includes(c.main.split('·')[0]));
-const cat=available.length>0?available[Math.floor(Math.random()*available.length)]:categories[Math.floor(Math.random()*categories.length)];
-const text=await callAI(`저탄고지 저녁 메뉴를 딱 하나 추천해줘. 반드시 [${cat.main}] 재료로 만드는 요리여야 해.
-
-예시 참고 (그대로 쓰지 말고 영감만 얻어): ${cat.examples}
-
-[절대 금지 - 이것들과 주재료·조리법이 달라야 함]
-현재 메뉴: ${meal.menu}
-이번 주 메뉴: ${otherMenus}
-
-[조건]
-- 밥 없이 (저탄고지)
-- 한국 가정 요리, 20분 이내
-- 부부가 같이 먹을 수 있는 것
-
-JSON만 응답. 다른 텍스트 절대 없이.
-{"day":"${meal.day}","menu":"요리명","detail":"주재료 나열, 조리법 한 줄"}`);
+    const meal=state.meals[idx];const otherMenus=state.meals.filter((_,i)=>i!==idx).map(m=>m.menu).join(', ');
+    const categories=[{main:'해산물·생선',examples:'고등어구이, 연어스테이크, 오징어볶음, 낙지볶음, 쭈꾸미볶음, 새우볶음'},{main:'닭고기',examples:'닭갈비, 닭볶음탕, 닭가슴살구이, 간장닭조림'},{main:'소고기',examples:'차돌박이숙주볶음, 소고기미역국, 갈비찜, 육전'},{main:'돼지고기찌개',examples:'김치찌개+삼겹살, 된장찌개+목살, 제육볶음, 돼지갈비찜'},{main:'계란·두부',examples:'계란찜+제육, 두부김치, 순두부찌개, 두부조림'},{main:'훈제·가공육',examples:'훈제오리볶음, 베이컨야채볶음, 소시지볶음'}];
+    const usedMains=otherMenus+meal.menu;
+    const available=categories.filter(c=>!usedMains.includes(c.main.split('·')[0]));
+    const cat=available.length>0?available[Math.floor(Math.random()*available.length)]:categories[Math.floor(Math.random()*categories.length)];
+    const text=await callAI(`저탄고지 저녁 메뉴를 딱 하나 추천해줘. 반드시 [${cat.main}] 재료로 만드는 요리여야 해.\n\n예시 참고: ${cat.examples}\n\n[절대 금지]\n현재 메뉴: ${meal.menu}\n이번 주 메뉴: ${otherMenus}\n\n[조건]\n- 밥 없이 (저탄고지)\n- 한국 가정 요리, 20분 이내\n- 부부가 같이 먹을 수 있는 것\n\nJSON만 응답.\n{"day":"${meal.day}","menu":"요리명","detail":"주재료, 조리법 한 줄"}`);
     state.meals[idx]=JSON.parse(text);
-    await saveState();renderWeek();renderTodayMeal();
-    // 장보기 목록도 업데이트
-    const groceryText=await callAI(`이 일주일 식단 기준으로 장보기 목록을 만들어줘. 재료는 일주일치로 계산하고 겹치는 재료는 합쳐줘: ${JSON.stringify(state.meals)}. 일주일에 한 번 장보기 기준. 반드시 JSON 객체만 응답. {"고기·단백질":["삼겹살 600g",...],"채소·나물":["상추 1봉",...],"양념·기타":["된장",...]}`);
-    state.grocery=JSON.parse(groceryText);
-    state.groceryChecks={};state.groceryStatus={};
-    await saveState();renderGrocery();
+    const groceryText=await callAI(`이 일주일 식단 기준 장보기 목록: ${JSON.stringify(state.meals)}. 일주일치, 겹치는 재료 합쳐서. JSON만 응답. {"고기·단백질":[...],"채소·나물":[...],"양념·기타":[...]}`);
+    state.grocery=JSON.parse(groceryText);state.groceryChecks={};state.groceryStatus={};
+    await saveState();renderWeek();renderTodayMeal();renderGrocery();
   }catch(e){
     document.getElementById('regenError').innerHTML=`<div class="error-box">오류: ${e.message||'다시 시도해주세요.'}</div>`;
     renderTodayMeal();
   }
 };
 
+function renderChat(){
+  const el=document.getElementById('chatMessages');if(!el)return;
+  el.innerHTML='';
+  (state.chatMessages||[]).forEach(msg=>{
+    const isMe=msg.user===currentUser;const isAI=msg.user==='ai';
+    const wrap=document.createElement('div');wrap.className=`chat-bubble-wrap ${isAI?'ai':isMe?'mine':'other'}`;
+    const senderName=isAI?'🌿 건강 AI':msg.user==='den'?'Den':'아키';
+    const t=new Date(msg.ts);const timeStr=`${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`;
+    wrap.innerHTML=`<div class="chat-sender">${senderName}</div><div class="chat-bubble ${isAI?'ai':isMe?'mine':'other'}">${msg.text.replace(/\n/g,'<br>')}</div><div class="chat-time">${timeStr}</div>`;
+    el.appendChild(wrap);
+  });
+  el.scrollTop=el.scrollHeight;
+}
+async function sendChat(){
+  const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;
+  input.value='';input.style.height='auto';
+  if(!state.chatMessages)state.chatMessages=[];
+  state.chatMessages.push({user:currentUser,text,ts:Date.now()});
+  await saveState();renderChat();
+  const el=document.getElementById('chatMessages');
+  const typing=document.createElement('div');typing.className='chat-bubble-wrap ai';typing.id='typingIndicator';
+  typing.innerHTML='<div class="chat-sender">🌿 건강 AI</div><div class="chat-typing"><span></span><span></span><span></span></div>';
+  el.appendChild(typing);el.scrollTop=el.scrollHeight;
+  document.getElementById('chatSend').disabled=true;
+  try{
+    const context=`Den: 저탄고지, 간헐적 단식, 마그네슘+D3K2+오메가3+프로바이오틱스 복용\n아키: 점심 있음, 식후 복통, 오메가3+프로바이오틱스 복용\n현재 식단: ${JSON.stringify(state.meals)}`;
+    const messages=(state.chatMessages||[]).slice(-10).map(m=>({role:m.user==='ai'?'assistant':'user',content:m.user==='ai'?m.text:`[${m.user==='den'?'Den':'아키'}] ${m.text}`}));
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getAnthropicKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:600,system:`당신은 Den과 아키 부부의 건강 관리 AI 어시스턴트예요. 저탄고지 식단, 간헐적 단식, 영양제, 운동에 대해 친근하고 실용적으로 답해줘요. 한국어로 답하고 핵심만 간결하게. 의학적 진단은 안 해요.\n\n${context}`,messages})});
+    const d=await resp.json();const aiText=d.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+    document.getElementById('typingIndicator')?.remove();
+    state.chatMessages.push({user:'ai',text:aiText,ts:Date.now()});
+    await saveState();renderChat();
+  }catch(e){
+    document.getElementById('typingIndicator')?.remove();
+    state.chatMessages.push({user:'ai',text:'오류가 났어요. 다시 시도해주세요.',ts:Date.now()});
+    renderChat();
+  }
+  document.getElementById('chatSend').disabled=false;
+}
+document.getElementById('chatSend').onclick=sendChat;
+document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+document.getElementById('chatInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px';});
+
 function renderWeightPanel(){
-  const who=activeWho;
-  const cfg=state.settings[who]||{};
-  const goal=cfg.goal;
+  const who=activeWho;const cfg=state.settings[who]||{};const goal=cfg.goal;
   const wData=Object.entries(state.days).filter(([,v])=>v&&v[who+'_weight']).sort(([a],[b])=>a.localeCompare(b));
   document.getElementById('weightGoalLabel').textContent=goal?`목표 ${goal}kg`:'';
-  if(wData.length>0){
-    const latest=wData[wData.length-1][1][who+'_weight'];
-    document.getElementById('weightDiffLabel').textContent=goal?`남은 ${(latest-goal).toFixed(1)}kg`:'';
-  }else{document.getElementById('weightDiffLabel').textContent='';}
+  if(wData.length>0){const latest=wData[wData.length-1][1][who+'_weight'];document.getElementById('weightDiffLabel').textContent=goal?`남은 ${(latest-goal).toFixed(1)}kg`:'';
+  }else document.getElementById('weightDiffLabel').textContent='';
   const log=document.getElementById('weightLog');log.innerHTML='';
   wData.slice(-10).reverse().forEach(([date,v])=>{
-    const w=v[who+'_weight'];
-    const diff=goal?` · -${(w-goal).toFixed(1)}kg`:'';
+    const w=v[who+'_weight'];const diff=goal?` · -${(w-goal).toFixed(1)}kg`:'';
     const row=document.createElement('div');row.className='weight-log-item';
-    row.innerHTML=`<span style="font-family:'SF Mono','Courier New',monospace;font-size:12px;color:var(--muted);font-weight:500;">${fmtDate(date)}</span><span style="font-size:15px;font-weight:500;color:var(--text);">${w}<span style="font-size:11px;color:var(--muted);"> kg${diff}</span></span><span class="weight-del" data-date="${date}">삭제</span>`;
-    row.querySelector('.weight-del').onclick=async(e)=>{
-      const d=e.target.dataset.date;
-      if(state.days[d])delete state.days[d][who+'_weight'];
-      await saveState();renderWeightPanel();
-    };
+    row.innerHTML=`<span style="font-family:'SF Mono','Courier New',monospace;font-size:13px;color:var(--muted);font-weight:500;">${fmtDate(date)}</span><span style="font-size:16px;font-weight:600;color:var(--text);">${w}<span style="font-size:12px;color:var(--muted);"> kg${diff}</span></span><span class="weight-del" data-date="${date}">삭제</span>`;
+    row.querySelector('.weight-del').onclick=async(e)=>{const d=e.target.dataset.date;if(state.days[d])delete state.days[d][who+'_weight'];await saveState();renderWeightPanel();};
     log.appendChild(row);
   });
   drawChart(wData,who,goal);
 }
 function drawChart(wData,who,goal){
-  const entries=wData.slice(-30);
-  const labels=entries.map(([k])=>fmtDate(k));
-  const values=entries.map(([,v])=>v[who+'_weight']);
+  const entries=wData.slice(-30);const labels=entries.map(([k])=>fmtDate(k));const values=entries.map(([,v])=>v[who+'_weight']);
   const ctx=document.getElementById('wChart').getContext('2d');
   if(window._wChart)window._wChart.destroy();
-  if(values.length<2){
-    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
-    ctx.font='13px Gowun Dodum';ctx.fillStyle='var(--muted)';ctx.textAlign='center';
-    ctx.fillText('체중을 2일 이상 기록하면 그래프가 나와요',ctx.canvas.width/2,60);return;
-  }
+  if(values.length<2){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);ctx.font='14px -apple-system';ctx.fillStyle='#888';ctx.textAlign='center';ctx.fillText('체중을 2일 이상 기록하면 그래프가 나와요',ctx.canvas.width/2,65);return;}
   const datasets=[{data:values,borderColor:'#0B7A54',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#0B7A54',tension:0.3,fill:false}];
   if(goal)datasets.push({data:Array(values.length).fill(goal),borderColor:'#C47F00',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false});
-  window._wChart=new Chart(ctx,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:true,ticks:{font:{size:11},color:'#555550',maxTicksLimit:4},grid:{color:'rgba(0,0,0,0.07)'}}}}});
+  window._wChart=new Chart(ctx,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:true,ticks:{font:{size:12},color:'#555550',maxTicksLimit:4},grid:{color:'rgba(0,0,0,0.07)'}}}}});
 }
 function renderSettings(){
   const den=state.settings.den||{};const aki=state.settings.aki||{};
@@ -802,265 +787,47 @@ function renderSettings(){
   document.getElementById('currentUserLabel').textContent=currentUser==='den'?'Den':'아키';
 }
 
-document.querySelectorAll('.who-tab').forEach(t=>{
-  t.onclick=()=>{document.querySelectorAll('.who-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');activeWho=t.dataset.who;renderWeightPanel();};
-});
+document.querySelectorAll('.who-tab').forEach(t=>{t.onclick=()=>{document.querySelectorAll('.who-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');activeWho=t.dataset.who;renderWeightPanel();};});
 document.querySelectorAll('.nav-item').forEach(t=>{
   t.onclick=()=>{
     document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>{x.classList.remove('active');x.style.display='none';});
     t.classList.add('active');
-    document.getElementById('tab-'+t.dataset.tab).classList.add('active');
+    const panel=document.getElementById('tab-'+t.dataset.tab);
+    panel.style.display=t.dataset.tab==='chat'?'flex':'block';
+    panel.classList.add('active');
     if(t.dataset.tab==='weight')renderWeightPanel();
-    if(t.dataset.tab==='chat'){renderChat();}
+    if(t.dataset.tab==='chat')renderChat();
+    if(t.dataset.tab==='routine')renderRoutineEditor();
   };
 });
 document.getElementById('prevDay').onclick=()=>{currentDate=shiftDate(currentDate,-1);renderDate();renderTimeline();renderMemo();renderCalendar();};
 document.getElementById('nextDay').onclick=()=>{if(currentDate<todayStr()){currentDate=shiftDate(currentDate,1);renderDate();renderTimeline();renderMemo();renderCalendar();}};
-document.getElementById('saveMemo').onclick=async()=>{
-  const myKey=currentUser+'_memo';
-  getDay(currentDate)[myKey]=document.getElementById('memoInput').value;
-  await saveState();const b=document.getElementById('saveMemo');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);
-};
-document.getElementById('saveWeight').onclick=async()=>{
-  const v=parseFloat(document.getElementById('weightInput').value);
-  if(!isNaN(v)&&v>30&&v<200){getDay(currentDate)[activeWho+'_weight']=v;await saveState();document.getElementById('weightInput').value='';renderWeightPanel();}
-};
+document.getElementById('saveMemo').onclick=async()=>{const myKey=currentUser+'_memo';getDay(currentDate)[myKey]=document.getElementById('memoInput').value;await saveState();const b=document.getElementById('saveMemo');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);};
+document.getElementById('saveWeight').onclick=async()=>{const v=parseFloat(document.getElementById('weightInput').value);if(!isNaN(v)&&v>30&&v<200){getDay(currentDate)[activeWho+'_weight']=v;await saveState();document.getElementById('weightInput').value='';renderWeightPanel();}};
 document.getElementById('saveSettings').onclick=async()=>{
   if(!state.settings.den)state.settings.den={};if(!state.settings.aki)state.settings.aki={};
-  const dc=parseFloat(document.getElementById('settingDenCurrent').value);
-  const dg=parseFloat(document.getElementById('settingDenGoal').value);
-  const ac=parseFloat(document.getElementById('settingAkiCurrent').value);
-  const ag=parseFloat(document.getElementById('settingAkiGoal').value);
+  const dc=parseFloat(document.getElementById('settingDenCurrent').value);const dg=parseFloat(document.getElementById('settingDenGoal').value);
+  const ac=parseFloat(document.getElementById('settingAkiCurrent').value);const ag=parseFloat(document.getElementById('settingAkiGoal').value);
   if(!isNaN(dc))state.settings.den.current=dc;if(!isNaN(dg))state.settings.den.goal=dg;
   if(!isNaN(ac))state.settings.aki.current=ac;if(!isNaN(ag))state.settings.aki.goal=ag;
   await saveState();const b=document.getElementById('saveSettings');b.textContent='저장됨';setTimeout(()=>b.textContent='설정 저장',1500);
 };
-document.getElementById('switchUser').onclick=()=>{
-  const cfg=getCfg();if(!cfg)return;
-  cfg.user=currentUser==='den'?'aki':'den';
-  saveCfg(cfg);location.reload();
-};
-document.getElementById('resetFirebase').onclick=()=>{
-  if(confirm('Firebase 설정을 초기화할까요? 다시 입력해야 해요.')){localStorage.removeItem('ht_cfg_v2');location.reload();}
-};
-
+document.getElementById('switchUser').onclick=()=>{const cfg=getCfg();if(!cfg)return;cfg.user=currentUser==='den'?'aki':'den';saveCfg(cfg);location.reload();};
+document.getElementById('resetFirebase').onclick=()=>{if(confirm('Firebase 설정을 초기화할까요?')){localStorage.removeItem('ht_cfg_v2');location.reload();}};
 document.getElementById('checkUpdate').onclick=()=>{
-  // Chat
-if(!state.chatMessages)state.chatMessages=[];
-
-function renderChat(){
-  const el=document.getElementById('chatMessages');
-  if(!el)return;
-  el.innerHTML='';
-  (state.chatMessages||[]).forEach(msg=>{
-    const isMe=msg.user===currentUser;
-    const isAI=msg.user==='ai';
-    const wrap=document.createElement('div');
-    wrap.className=`chat-bubble-wrap ${isAI?'ai':isMe?'mine':'other'}`;
-    const senderName=isAI?'🌿 건강 AI':msg.user==='den'?'Den':'아키';
-    const bubbleClass=isAI?'ai':isMe?'mine':'other';
-    const t=new Date(msg.ts);
-    const timeStr=`${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`;
-    wrap.innerHTML=`<div class="chat-sender">${senderName}</div><div class="chat-bubble ${bubbleClass}">${msg.text.replace(/\n/g,'<br>')}</div><div class="chat-time">${timeStr}</div>`;
-    el.appendChild(wrap);
-  });
-  el.scrollTop=el.scrollHeight;
-}
-
-async function sendChat(){
-  const input=document.getElementById('chatInput');
-  const text=input.value.trim();
-  if(!text)return;
-  input.value='';
-  input.style.height='auto';
-
-  if(!state.chatMessages)state.chatMessages=[];
-  state.chatMessages.push({user:currentUser,text,ts:Date.now()});
-  await saveState();
-  renderChat();
-
-  // Show typing indicator
-  const el=document.getElementById('chatMessages');
-  const typing=document.createElement('div');
-  typing.className='chat-bubble-wrap ai';
-  typing.id='typingIndicator';
-  typing.innerHTML='<div class="chat-sender">🌿 건강 AI</div><div class="chat-typing"><span></span><span></span><span></span></div>';
-  el.appendChild(typing);
-  el.scrollTop=el.scrollHeight;
-  document.getElementById('chatSend').disabled=true;
-
-  try{
-    const context=`사용자 정보:
-- Den: 저탄고지 식단, 간헐적 단식(저녁 한 끼 기준), 결혼 후 10kg 증가, 운동 시작(경복궁 걷기), 복용 영양제: 마그네슘(Thorne), 비타민D3+K2(Thorne), 오메가3(Carlson Labs), 프로바이오틱스(Jarrow)
-- 아키: 점심 있음, 식후 복통, 복용 영양제: 오메가3, 프로바이오틱스
-- 현재 식단: ${JSON.stringify(state.meals)}`;
-
-    const messages=(state.chatMessages||[]).slice(-10).map(m=>({
-      role:m.user==='ai'?'assistant':'user',
-      content:m.user==='ai'?m.text:`[${m.user==='den'?'Den':'아키'}] ${m.text}`
-    }));
-
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':getAnthropicKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-5',
-        max_tokens:600,
-        system:`당신은 Den과 아키 부부의 건강 관리 AI 어시스턴트예요. 저탄고지 식단, 간헐적 단식, 영양제, 운동에 대해 친근하고 실용적으로 답해줘요. 한국어로 답하고, 너무 길지 않게 핵심만 말해요. 의학적 진단은 하지 않고, 필요하면 전문의 상담을 권유해요.
-
-${context}`,
-        messages
-      })
-    });
-    const d=await resp.json();
-    const aiText=d.content.filter(c=>c.type==='text').map(c=>c.text).join('');
-    document.getElementById('typingIndicator')?.remove();
-    state.chatMessages.push({user:'ai',text:aiText,ts:Date.now()});
-    await saveState();
-    renderChat();
-  }catch(e){
-    document.getElementById('typingIndicator')?.remove();
-    state.chatMessages.push({user:'ai',text:'죄송해요, 오류가 났어요. 다시 시도해주세요.',ts:Date.now()});
-    renderChat();
-  }
-  document.getElementById('chatSend').disabled=false;
-}
-
-document.getElementById('chatSend').onclick=sendChat;
-document.getElementById('chatInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
-});
-document.getElementById('chatInput').addEventListener('input',function(){
-  this.style.height='auto';
-  this.style.height=Math.min(this.scrollHeight,100)+'px';
-});
-
-if('serviceWorker' in navigator){
+  if('serviceWorker' in navigator){
     navigator.serviceWorker.getRegistration().then(reg=>{
-      if(reg){
-        reg.update().then(()=>{
-          const b=document.getElementById('checkUpdate');
-          b.textContent='확인 중...';
-          setTimeout(()=>{
-            if(reg.waiting){
-              if(confirm('새 버전이 있어요. 지금 업데이트할까요?')){
-                reg.waiting.postMessage({type:'SKIP_WAITING'});
-                location.reload();
-              }
-            } else {
-              b.textContent='최신 버전이에요';
-              setTimeout(()=>b.textContent='업데이트 확인',2000);
-            }
-          },1500);
-        });
-      } else {
-        location.reload();
-      }
+      if(reg){reg.update().then(()=>{const b=document.getElementById('checkUpdate');b.textContent='확인 중...';setTimeout(()=>{if(reg.waiting){if(confirm('새 버전이 있어요. 지금 업데이트할까요?')){reg.waiting.postMessage({type:'SKIP_WAITING'});location.reload();}}else{b.textContent='최신 버전이에요';setTimeout(()=>b.textContent='업데이트 확인',2000);}},1500);});}else{location.reload();}
     });
-  } else {
-    location.reload();
-  }
+  }else{location.reload();}
 };
-// Chat
-if(!state.chatMessages)state.chatMessages=[];
-
-function renderChat(){
-  const el=document.getElementById('chatMessages');
-  if(!el)return;
-  el.innerHTML='';
-  (state.chatMessages||[]).forEach(msg=>{
-    const isMe=msg.user===currentUser;
-    const isAI=msg.user==='ai';
-    const wrap=document.createElement('div');
-    wrap.className=`chat-bubble-wrap ${isAI?'ai':isMe?'mine':'other'}`;
-    const senderName=isAI?'🌿 건강 AI':msg.user==='den'?'Den':'아키';
-    const bubbleClass=isAI?'ai':isMe?'mine':'other';
-    const t=new Date(msg.ts);
-    const timeStr=`${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`;
-    wrap.innerHTML=`<div class="chat-sender">${senderName}</div><div class="chat-bubble ${bubbleClass}">${msg.text.replace(/\n/g,'<br>')}</div><div class="chat-time">${timeStr}</div>`;
-    el.appendChild(wrap);
-  });
-  el.scrollTop=el.scrollHeight;
-}
-
-async function sendChat(){
-  const input=document.getElementById('chatInput');
-  const text=input.value.trim();
-  if(!text)return;
-  input.value='';
-  input.style.height='auto';
-
-  if(!state.chatMessages)state.chatMessages=[];
-  state.chatMessages.push({user:currentUser,text,ts:Date.now()});
-  await saveState();
-  renderChat();
-
-  // Show typing indicator
-  const el=document.getElementById('chatMessages');
-  const typing=document.createElement('div');
-  typing.className='chat-bubble-wrap ai';
-  typing.id='typingIndicator';
-  typing.innerHTML='<div class="chat-sender">🌿 건강 AI</div><div class="chat-typing"><span></span><span></span><span></span></div>';
-  el.appendChild(typing);
-  el.scrollTop=el.scrollHeight;
-  document.getElementById('chatSend').disabled=true;
-
-  try{
-    const context=`사용자 정보:
-- Den: 저탄고지 식단, 간헐적 단식(저녁 한 끼 기준), 결혼 후 10kg 증가, 운동 시작(경복궁 걷기), 복용 영양제: 마그네슘(Thorne), 비타민D3+K2(Thorne), 오메가3(Carlson Labs), 프로바이오틱스(Jarrow)
-- 아키: 점심 있음, 식후 복통, 복용 영양제: 오메가3, 프로바이오틱스
-- 현재 식단: ${JSON.stringify(state.meals)}`;
-
-    const messages=(state.chatMessages||[]).slice(-10).map(m=>({
-      role:m.user==='ai'?'assistant':'user',
-      content:m.user==='ai'?m.text:`[${m.user==='den'?'Den':'아키'}] ${m.text}`
-    }));
-
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':getAnthropicKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-5',
-        max_tokens:600,
-        system:`당신은 Den과 아키 부부의 건강 관리 AI 어시스턴트예요. 저탄고지 식단, 간헐적 단식, 영양제, 운동에 대해 친근하고 실용적으로 답해줘요. 한국어로 답하고, 너무 길지 않게 핵심만 말해요. 의학적 진단은 하지 않고, 필요하면 전문의 상담을 권유해요.
-
-${context}`,
-        messages
-      })
-    });
-    const d=await resp.json();
-    const aiText=d.content.filter(c=>c.type==='text').map(c=>c.text).join('');
-    document.getElementById('typingIndicator')?.remove();
-    state.chatMessages.push({user:'ai',text:aiText,ts:Date.now()});
-    await saveState();
-    renderChat();
-  }catch(e){
-    document.getElementById('typingIndicator')?.remove();
-    state.chatMessages.push({user:'ai',text:'죄송해요, 오류가 났어요. 다시 시도해주세요.',ts:Date.now()});
-    renderChat();
-  }
-  document.getElementById('chatSend').disabled=false;
-}
-
-document.getElementById('chatSend').onclick=sendChat;
-document.getElementById('chatInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
-});
-document.getElementById('chatInput').addEventListener('input',function(){
-  this.style.height='auto';
-  this.style.height=Math.min(this.scrollHeight,100)+'px';
-});
 
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').then(reg=>{
     reg.addEventListener('updatefound',()=>{
       const nw=reg.installing;
-      nw.addEventListener('statechange',()=>{
-        if(nw.state==='installed'&&navigator.serviceWorker.controller){
-          if(confirm('새 버전이 있어요. 지금 업데이트할까요?'))location.reload();
-        }
-      });
+      nw.addEventListener('statechange',()=>{if(nw.state==='installed'&&navigator.serviceWorker.controller){if(confirm('새 버전이 있어요. 지금 업데이트할까요?'))location.reload();}});
     });
   });
 }
