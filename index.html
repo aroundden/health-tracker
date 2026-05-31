@@ -400,9 +400,9 @@ function listenFirebase(){
   });
 }
 async function saveState(){if(!db)return;await set(ref(db,'ht'),state);}
-function getDay(d){if(!state.days[d])state.days[d]={checks:{},memo:''};return state.days[d];}
+function getDay(d){if(!state.days[d])state.days[d]={checks:{},memo:''};if(!state.days[d].checks)state.days[d].checks={};return state.days[d];}
 const TOTAL=ALL_ITEMS.length;
-function getDayScore(d){const day=state.days[d];if(!day)return 0;return ALL_ITEMS.filter(x=>day.checks&&day.checks[x.id]).length;}
+function getDayScore(d){const day=state.days[d];if(!day||!day.checks)return 0;return ALL_ITEMS.filter(x=>day.checks[x.id]).length;}
 
 function renderAll(){
   renderDate();renderCalendar();renderTimeline();renderMemo();
