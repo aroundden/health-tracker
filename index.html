@@ -129,8 +129,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
 .g-name.striked{text-decoration:line-through;color:var(--hint);}
 .g-qty{font-size:12px;color:var(--muted);font-weight:500;}
 .g-status{font-size:10px;padding:2px 7px;border-radius:99px;cursor:pointer;border:none;font-weight:500;white-space:nowrap;}
-.g-status.have{background:#B8E8D4;color:#052E1F;}
 .g-status.need{background:#FFE8CC;color:#7A3D00;}
+.g-status.have{background:#B8E8D4;color:#052E1F;}
+.g-status.bought{background:#E0E0E0;color:#888;}
 
 /* Weight */
 .who-tabs{display:flex;gap:6px;margin-bottom:14px;}
@@ -222,7 +223,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <div>
       <div class="header-title">건강 트래커</div>
       <div class="header-sub" id="headerSub">Den & 아키</div>
-      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:15</div>
+      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:21</div>
     </div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
@@ -608,25 +609,25 @@ function renderTodayMeal(){
 function renderGrocery(){
   const el=document.getElementById('groceryList');el.innerHTML='';
   if(!state.groceryStatus)state.groceryStatus={};
+  const ORDER={need:0,have:1,bought:2};
   Object.entries(state.grocery).forEach(([cat,items])=>{
     const catEl=document.createElement('div');catEl.className='grocery-cat';catEl.textContent=cat;el.appendChild(catEl);
-    // 사야함 먼저, 있음 나중
     const indexed=items.map((item,i)=>({item,i,key:cat+'_'+i}));
-    const need=indexed.filter(x=>(state.groceryStatus[x.key]||'need')==='need');
-    const have=indexed.filter(x=>(state.groceryStatus[x.key]||'need')==='have');
-    [...need,...have].forEach(({item,i,key})=>{
-      const done=!!state.groceryChecks[key];
+    indexed.sort((a,b)=>(ORDER[state.groceryStatus[a.key]||'need']||0)-(ORDER[state.groceryStatus[b.key]||'need']||0));
+    indexed.forEach(({item,key})=>{
       const status=state.groceryStatus[key]||'need';
       const match=item.match(/^(.+?)\s+(\S+)$/);
       const name=match?match[1]:item;const qty=match?match[2]:'';
       const row=document.createElement('div');row.className='grocery-item';
-      if(status==='have')row.style.opacity='0.5';
-      row.innerHTML=`<div class="g-check${done?' done':''}" data-key="${key}"></div><span class="g-name${done?' striked':''}">${name}</span><span class="g-qty" style="margin-right:6px;">${qty}</span><button class="g-status ${status}" data-key="${key}">${status==='have'?'있음':'사야함'}</button>`;
-      row.querySelector('.g-check').onclick=async()=>{state.groceryChecks[key]=!state.groceryChecks[key];await saveState();renderGrocery();};
+      const faded=status==='have'||status==='bought';
+      if(faded)row.style.opacity='0.45';
+      const labelMap={need:'사야함',have:'있음',bought:'구매완료'};
+      const nextMap={need:'have',have:'bought',bought:'need'};
+      row.innerHTML=`<span class="g-name${faded?' striked':''}">${name}</span><span class="g-qty" style="margin-right:6px;">${qty}</span><button class="g-status ${status}" data-key="${key}">${labelMap[status]}</button>`;
       row.querySelector('.g-status').onclick=async(e)=>{
         e.stopPropagation();
         if(!state.groceryStatus)state.groceryStatus={};
-        state.groceryStatus[key]=state.groceryStatus[key]==='have'?'need':'have';
+        state.groceryStatus[key]=nextMap[state.groceryStatus[key]||'need'];
         await saveState();renderGrocery();
       };
       el.appendChild(row);
@@ -654,21 +655,34 @@ window.regenToday=async function(idx){
   try{
     const meal=state.meals[idx];
     const otherMenus=state.meals.filter((_,i)=>i!==idx).map(m=>m.menu).join(', ');
-    const text=await callAI(`저탄고지 저녁 메뉴를 완전히 새로 하나 추천해줘. 지금 메뉴(${meal.menu})가 당기지 않아서 바꾸는 거야. 반드시 지금 메뉴와 완전히 다른 요리여야 해.
+    // Force completely different category
+const categories=[
+  {main:'해산물·생선',examples:'고등어구이, 연어스테이크, 오징어볶음, 낙지볶음, 쭈꾸미볶음, 새우볶음, 꽁치구이'},
+  {main:'닭고기',examples:'닭갈비, 닭볶음탕, 닭가슴살구이, 허브치킨, 간장닭조림'},
+  {main:'소고기',examples:'차돌박이숙주볶음, 소고기미역국, 갈비찜, 소고기볶음, 육전'},
+  {main:'돼지고기찌개·조림',examples:'김치찌개+삼겹살, 된장찌개+목살, 부대찌개, 제육볶음, 돼지갈비찜'},
+  {main:'계란·두부',examples:'계란찜+제육, 두부김치, 순두부찌개, 두부조림+삼겹살, 스크램블에그+베이컨'},
+  {main:'훈제·가공육',examples:'훈제오리볶음, 베이컨야채볶음, 소시지볶음, 햄계란볶음'},
+];
+// 현재 메뉴에서 쓴 재료 파악해서 다른 카테고리 선택
+const usedMains=otherMenus+meal.menu;
+const available=categories.filter(c=>!usedMains.includes(c.main.split('·')[0]));
+const cat=available.length>0?available[Math.floor(Math.random()*available.length)]:categories[Math.floor(Math.random()*categories.length)];
+const text=await callAI(`저탄고지 저녁 메뉴를 딱 하나 추천해줘. 반드시 [${cat.main}] 재료로 만드는 요리여야 해.
 
-필수 조건:
-- 주재료가 완전히 달라야 함 (지금: ${meal.menu} → 완전히 다른 것)
-- 이번 주 이미 있는 메뉴(${otherMenus})와 절대 겹치면 안 됨
-- 저탄고지: 밥 없이, 고기나 단백질 위주
-- 한국 가정에서 쉽게 만들 수 있는 것
-- 아내도 같이 먹을 수 있는 것
-- 토요일이면 자유식 가능
+예시 참고 (그대로 쓰지 말고 영감만 얻어): ${cat.examples}
 
-추천 가능한 메뉴 예시 (이것만 하라는 게 아니라 참고용):
-삼겹살구이, 목살구이, 소불고기, 닭갈비, 제육볶음, 갈비찜, 순두부찌개+고기, 된장찌개+삼겹살, 계란찜+나물, 두부김치, 오삼불고기, 쭈꾸미볶음, 낙지볶음, 생선구이, 훈제오리볶음 등
+[절대 금지 - 이것들과 주재료·조리법이 달라야 함]
+현재 메뉴: ${meal.menu}
+이번 주 메뉴: ${otherMenus}
 
-반드시 JSON 객체만 응답. 다른 텍스트 없이.
-{"day":"${meal.day}","menu":"메뉴명","detail":"주재료·간단한 조리법"}`);
+[조건]
+- 밥 없이 (저탄고지)
+- 한국 가정 요리, 20분 이내
+- 부부가 같이 먹을 수 있는 것
+
+JSON만 응답. 다른 텍스트 절대 없이.
+{"day":"${meal.day}","menu":"요리명","detail":"주재료 나열, 조리법 한 줄"}`);
     state.meals[idx]=JSON.parse(text);
     await saveState();renderWeek();renderTodayMeal();
   }catch(e){
