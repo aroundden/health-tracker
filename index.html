@@ -118,7 +118,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
 
 /* Grocery */
 .grocery-card{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;padding:14px;}
-.grocery-cat{font-size:12px;font-weight:500;color:var(--text);margin:12px 0 6px;letter-spacing:.04em;}
+.grocery-cat{font-size:11px;font-weight:600;color:var(--card);background:var(--green);padding:5px 10px;border-radius:6px;margin:14px 0 8px;letter-spacing:.06em;display:inline-block;}
 .grocery-cat:first-child{margin-top:0;}
 .grocery-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
 .grocery-item:last-child{border-bottom:none;}
@@ -223,7 +223,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <div>
       <div class="header-title">건강 트래커</div>
       <div class="header-sub" id="headerSub">Den & 아키</div>
-      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:25</div>
+      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:28</div>
     </div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
@@ -333,6 +333,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
       </div>
     </div>
     <button class="btn btn-green" id="saveSettings" style="width:100%;padding:12px;margin-bottom:14px;">설정 저장</button>
+    <div class="sec-label">앱 버전</div>
+    <div class="card">
+      <div class="setting-row">
+        <div><div class="setting-label">현재 버전</div><div class="setting-sub" id="currentVerLabel">v05.31 08:28</div></div>
+        <button class="btn btn-green btn-sm" id="checkUpdate">업데이트 확인</button>
+      </div>
+    </div>
     <div class="sec-label">Firebase / API 재설정</div>
     <button class="btn" id="resetFirebase" style="width:100%;padding:12px;">초기화 (주의: 다시 입력해야 해요)</button>
   </div>
@@ -699,6 +706,11 @@ JSON만 응답. 다른 텍스트 절대 없이.
 {"day":"${meal.day}","menu":"요리명","detail":"주재료 나열, 조리법 한 줄"}`);
     state.meals[idx]=JSON.parse(text);
     await saveState();renderWeek();renderTodayMeal();
+    // 장보기 목록도 업데이트
+    const groceryText=await callAI(`이 일주일 식단 기준으로 장보기 목록을 만들어줘. 재료는 일주일치로 계산하고 겹치는 재료는 합쳐줘: ${JSON.stringify(state.meals)}. 일주일에 한 번 장보기 기준. 반드시 JSON 객체만 응답. {"고기·단백질":["삼겹살 600g",...],"채소·나물":["상추 1봉",...],"양념·기타":["된장",...]}`);
+    state.grocery=JSON.parse(groceryText);
+    state.groceryChecks={};state.groceryStatus={};
+    await saveState();renderGrocery();
   }catch(e){
     document.getElementById('regenError').innerHTML=`<div class="error-box">오류: ${e.message||'다시 시도해주세요.'}</div>`;
     renderTodayMeal();
@@ -796,6 +808,33 @@ document.getElementById('resetFirebase').onclick=()=>{
   if(confirm('Firebase 설정을 초기화할까요? 다시 입력해야 해요.')){localStorage.removeItem('ht_cfg_v2');location.reload();}
 };
 
+document.getElementById('checkUpdate').onclick=()=>{
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistration().then(reg=>{
+      if(reg){
+        reg.update().then(()=>{
+          const b=document.getElementById('checkUpdate');
+          b.textContent='확인 중...';
+          setTimeout(()=>{
+            if(reg.waiting){
+              if(confirm('새 버전이 있어요. 지금 업데이트할까요?')){
+                reg.waiting.postMessage({type:'SKIP_WAITING'});
+                location.reload();
+              }
+            } else {
+              b.textContent='최신 버전이에요';
+              setTimeout(()=>b.textContent='업데이트 확인',2000);
+            }
+          },1500);
+        });
+      } else {
+        location.reload();
+      }
+    });
+  } else {
+    location.reload();
+  }
+};
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').then(reg=>{
     reg.addEventListener('updatefound',()=>{
