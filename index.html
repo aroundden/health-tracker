@@ -9,8 +9,7 @@
 <meta name="theme-color" content="#0A3D2E"/>
 <link rel="manifest" href="manifest.json"/>
 <title>건강 트래커 — Den & 아키</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
@@ -30,7 +29,7 @@
     --border:rgba(255,255,255,0.12);--border-strong:rgba(255,255,255,0.22);
   }
 }
-body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 .app{max-width:480px;margin:0 auto;padding-bottom:80px;}
 
 /* Header */
@@ -38,12 +37,12 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 .header-title{font-size:22px;font-weight:500;color:var(--text);}
 .header-sub{font-size:13px;color:var(--muted);margin-top:2px;}
 .date-nav{display:flex;align-items:center;gap:6px;}
-.date-nav button{background:var(--card);border:1px solid var(--border-strong);border-radius:8px;padding:5px 10px;cursor:pointer;color:var(--text);font-size:14px;font-family:'Gowun Dodum',sans-serif;font-weight:500;}
-.date-str{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);min-width:80px;text-align:center;font-weight:500;}
+.date-nav button{background:var(--card);border:1px solid var(--border-strong);border-radius:8px;padding:5px 10px;cursor:pointer;color:var(--text);font-size:14px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-weight:500;}
+.date-str{font-family:'SF Mono','Courier New',monospace;font-size:12px;color:var(--text);min-width:80px;text-align:center;font-weight:500;}
 
 /* Bottom Nav */
 .bottom-nav{position:fixed;bottom:0;background:var(--card);border-top:1px solid var(--border-strong);display:flex;z-index:100;width:100%;max-width:480px;left:50%;transform:translateX(-50%);}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 14px;cursor:pointer;color:var(--hint);font-size:11px;gap:4px;border:none;background:none;font-family:'Gowun Dodum',sans-serif;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 14px;cursor:pointer;color:var(--hint);font-size:11px;gap:4px;border:none;background:none;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;}
 .nav-item.active{color:var(--green);}
 .nav-icon{font-size:20px;line-height:1;}
 
@@ -92,12 +91,12 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 
 /* Memo */
 .memo-card{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;padding:14px;}
-.memo-card textarea{width:100%;border:none;background:transparent;font-family:'Gowun Dodum',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;min-height:80px;line-height:1.7;}
+.memo-card textarea{width:100%;border:none;background:transparent;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;min-height:80px;line-height:1.7;}
 .memo-card textarea::placeholder{color:var(--hint);}
 .memo-footer{display:flex;justify-content:flex-end;margin-top:8px;}
 
 /* Buttons */
-.btn{background:var(--card);border:1px solid var(--border-strong);border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer;color:var(--text);font-family:'Gowun Dodum',sans-serif;font-weight:500;}
+.btn{background:var(--card);border:1px solid var(--border-strong);border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-weight:500;}
 .btn:active{opacity:.7;}
 .btn-green{background:var(--green);color:white;border-color:var(--green);}
 .btn-sm{padding:5px 12px;font-size:12px;}
@@ -129,10 +128,10 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 
 /* Weight */
 .who-tabs{display:flex;gap:6px;margin-bottom:14px;}
-.who-tab{flex:1;padding:9px;border:1px solid var(--border-strong);border-radius:10px;font-size:13px;cursor:pointer;color:var(--muted);background:var(--card);font-family:'Gowun Dodum',sans-serif;text-align:center;font-weight:500;}
+.who-tab{flex:1;padding:9px;border:1px solid var(--border-strong);border-radius:10px;font-size:13px;cursor:pointer;color:var(--muted);background:var(--card);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;text-align:center;font-weight:500;}
 .who-tab.active{background:var(--green);color:white;border-color:var(--green);}
 .weight-input-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.weight-input-row input{flex:1;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:16px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--text);outline:none;font-weight:500;}
+.weight-input-row input{flex:1;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:16px;font-family:'SF Mono','Courier New',monospace;background:var(--bg2);color:var(--text);outline:none;font-weight:500;}
 .weight-input-row input:focus{border-color:var(--green);}
 .weight-unit{font-size:14px;color:var(--muted);font-weight:500;}
 .chart-wrap{height:120px;margin-bottom:14px;}
@@ -146,7 +145,7 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 .setting-row:last-child{border-bottom:none;}
 .setting-label{font-size:14px;color:var(--text);font-weight:500;}
 .setting-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.setting-row input{width:100%;max-width:180px;border:1px solid var(--border-strong);border-radius:10px;padding:7px 10px;font-size:13px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--text);outline:none;text-align:right;font-weight:500;}
+.setting-row input{width:100%;max-width:180px;border:1px solid var(--border-strong);border-radius:10px;padding:7px 10px;font-size:13px;font-family:'SF Mono','Courier New',monospace;background:var(--bg2);color:var(--text);outline:none;text-align:right;font-weight:500;}
 .setting-row input:focus{border-color:var(--green);}
 
 /* AI */
@@ -162,11 +161,11 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 .setup-box{width:100%;max-width:440px;}
 .setup-title{font-size:22px;font-weight:500;margin-bottom:6px;color:var(--text);}
 .setup-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7;}
-.setup-input{width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:11px 12px;font-size:13px;font-family:'DM Mono',monospace;background:var(--card);color:var(--text);outline:none;margin-bottom:8px;font-weight:500;}
+.setup-input{width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:11px 12px;font-size:13px;font-family:'SF Mono','Courier New',monospace;background:var(--card);color:var(--text);outline:none;margin-bottom:8px;font-weight:500;}
 .setup-input:focus{border-color:var(--green);}
 .setup-label{font-size:12px;color:var(--muted);margin-bottom:4px;margin-top:10px;font-weight:500;}
 .user-select-wrap{display:flex;gap:10px;margin-bottom:20px;}
-.user-btn{flex:1;padding:16px;border:2px solid var(--border-strong);border-radius:14px;background:var(--card);cursor:pointer;font-family:'Gowun Dodum',sans-serif;text-align:center;}
+.user-btn{flex:1;padding:16px;border:2px solid var(--border-strong);border-radius:14px;background:var(--card);cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;text-align:center;}
 .user-btn.selected{border-color:var(--green);background:var(--green-light);}
 .user-btn-name{font-size:18px;font-weight:500;color:var(--text);margin-bottom:4px;}
 .user-btn-sub{font-size:12px;color:var(--muted);}
@@ -570,7 +569,7 @@ function renderTodayMeal(){
   const todayIdx=todayDayIdx();
   const meal=state.meals.find(m=>dayKorToIdx(m.day)===todayIdx)||state.meals[0];
   const mealIdx=state.meals.findIndex(m=>dayKorToIdx(m.day)===todayIdx);
-  document.getElementById('todayMeal').innerHTML=`<div class="today-meal-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="today-meal-label">오늘 저녁</div><div class="today-meal-name">${meal.menu}</div><div class="today-meal-detail">${meal.detail}</div></div><button onclick="regenToday(${mealIdx})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:8px;padding:6px 11px;font-size:11px;color:white;cursor:pointer;font-family:'Gowun Dodum',sans-serif;white-space:nowrap;margin-left:8px;font-weight:500;">갱신 ↗</button></div></div>`;
+  document.getElementById('todayMeal').innerHTML=`<div class="today-meal-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="today-meal-label">오늘 저녁</div><div class="today-meal-name">${meal.menu}</div><div class="today-meal-detail">${meal.detail}</div></div><button onclick="regenToday(${mealIdx})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:8px;padding:6px 11px;font-size:11px;color:white;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;white-space:nowrap;margin-left:8px;font-weight:500;">갱신 ↗</button></div></div>`;
 }
 function renderGrocery(){
   const el=document.getElementById('groceryList');el.innerHTML='';
@@ -632,7 +631,7 @@ function renderWeightPanel(){
     const w=v[who+'_weight'];
     const diff=goal?` · -${(w-goal).toFixed(1)}kg`:'';
     const row=document.createElement('div');row.className='weight-log-item';
-    row.innerHTML=`<span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);font-weight:500;">${fmtDate(date)}</span><span style="font-size:15px;font-weight:500;color:var(--text);">${w}<span style="font-size:11px;color:var(--muted);"> kg${diff}</span></span><span class="weight-del" data-date="${date}">삭제</span>`;
+    row.innerHTML=`<span style="font-family:'SF Mono','Courier New',monospace;font-size:12px;color:var(--muted);font-weight:500;">${fmtDate(date)}</span><span style="font-size:15px;font-weight:500;color:var(--text);">${w}<span style="font-size:11px;color:var(--muted);"> kg${diff}</span></span><span class="weight-del" data-date="${date}">삭제</span>`;
     row.querySelector('.weight-del').onclick=async(e)=>{
       const d=e.target.dataset.date;
       if(state.days[d])delete state.days[d][who+'_weight'];
