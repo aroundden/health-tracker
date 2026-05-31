@@ -133,6 +133,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
 .g-status.have{background:#B8E8D4;color:#052E1F;}
 .g-status.bought{background:#E0E0E0;color:#888;}
 
+/* Chat */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 160px);}
+.chat-messages{flex:1;overflow-y:auto;padding-bottom:10px;}
+.chat-bubble-wrap{display:flex;flex-direction:column;margin-bottom:12px;}
+.chat-bubble-wrap.mine{align-items:flex-end;}
+.chat-bubble-wrap.other{align-items:flex-start;}
+.chat-bubble-wrap.ai{align-items:flex-start;}
+.chat-sender{font-size:11px;color:var(--muted);margin-bottom:3px;font-weight:500;padding:0 4px;}
+.chat-bubble{max-width:80%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.6;}
+.chat-bubble.mine{background:var(--green);color:white;border-bottom-right-radius:4px;}
+.chat-bubble.other{background:var(--bg2);color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border);}
+.chat-bubble.ai{background:var(--card);color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border-strong);}
+.chat-time{font-size:10px;color:var(--hint);margin-top:3px;padding:0 4px;}
+.chat-input-wrap{display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border);}
+.chat-input{flex:1;border:1px solid var(--border-strong);border-radius:12px;padding:10px 14px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg2);color:var(--text);outline:none;resize:none;max-height:100px;}
+.chat-input:focus{border-color:var(--green);}
+.chat-send{background:var(--green);border:none;border-radius:12px;padding:10px 16px;color:white;font-size:14px;cursor:pointer;font-weight:500;white-space:nowrap;}
+.chat-send:disabled{opacity:0.5;}
+.chat-typing{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--card);border-radius:14px;border:1px solid var(--border-strong);max-width:80px;}
+.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;animation:bounce .8s infinite;}
+.chat-typing span:nth-child(2){animation-delay:.15s;}
+.chat-typing span:nth-child(3){animation-delay:.3s;}
 /* Weight */
 .who-tabs{display:flex;gap:6px;margin-bottom:14px;}
 .who-tab{flex:1;padding:9px;border:1px solid var(--border-strong);border-radius:10px;font-size:13px;cursor:pointer;color:var(--muted);background:var(--card);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;text-align:center;font-weight:500;}
@@ -223,7 +245,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <div>
       <div class="header-title">건강 트래커</div>
       <div class="header-sub" id="headerSub">Den & 아키</div>
-      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:28</div>
+      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:41</div>
     </div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
@@ -301,6 +323,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     </div>
   </div>
 
+  <div id="tab-chat" class="panel">
+    <div style="height:16px;"></div>
+    <div class="chat-wrap">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-wrap">
+        <textarea class="chat-input" id="chatInput" placeholder="건강·식단·운동 뭐든 물어봐요..." rows="1"></textarea>
+        <button class="chat-send" id="chatSend">전송</button>
+      </div>
+    </div>
+  </div>
+
   <div id="tab-settings" class="panel">
     <div style="height:16px;"></div>
     <div class="sec-label">현재 사용자</div>
@@ -336,7 +369,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <div class="sec-label">앱 버전</div>
     <div class="card">
       <div class="setting-row">
-        <div><div class="setting-label">현재 버전</div><div class="setting-sub" id="currentVerLabel">v05.31 08:28</div></div>
+        <div><div class="setting-label">현재 버전</div><div class="setting-sub" id="currentVerLabel">v05.31 08:41</div></div>
         <button class="btn btn-green btn-sm" id="checkUpdate">업데이트 확인</button>
       </div>
     </div>
@@ -348,6 +381,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <button class="nav-item active" data-tab="today"><span class="nav-icon">✓</span>오늘</button>
     <button class="nav-item" data-tab="diet"><span class="nav-icon">🥗</span>식단</button>
     <button class="nav-item" data-tab="weight"><span class="nav-icon">⚖</span>체중</button>
+    <button class="nav-item" data-tab="chat"><span class="nav-icon">💬</span>건강</button>
     <button class="nav-item" data-tab="settings"><span class="nav-icon">⚙</span>설정</button>
   </nav>
 </div>
@@ -476,6 +510,7 @@ async function loadFromFirebase(){
     if(d.grocery)state.grocery=d.grocery;
     if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
     if(d.groceryStatus)state.groceryStatus=d.groceryStatus;
+    if(d.chatMessages)state.chatMessages=d.chatMessages;
   }
 }
 function listenFirebase(){
@@ -492,6 +527,7 @@ function listenFirebase(){
     if(d.grocery)state.grocery=d.grocery;
     if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
     if(d.groceryStatus)state.groceryStatus=d.groceryStatus;
+    if(d.chatMessages)state.chatMessages=d.chatMessages;
     renderAll();
   });
 }
@@ -513,7 +549,7 @@ function renderAll(){
   document.getElementById('headerSub').textContent=currentUser==='den'?'Den 모드':'아키 모드';
   document.getElementById('currentUserLabel').textContent=currentUser==='den'?'Den':'아키';
   renderDate();renderCalendar();renderTimeline();renderMemo();
-  renderWeek();renderGrocery();renderSettings();renderWeightPanel();
+  renderWeek();renderGrocery();renderSettings();renderWeightPanel();renderChat();
 }
 function renderDate(){document.getElementById('dateStr').textContent=fmtDate(currentDate);}
 
@@ -776,6 +812,7 @@ document.querySelectorAll('.nav-item').forEach(t=>{
     t.classList.add('active');
     document.getElementById('tab-'+t.dataset.tab).classList.add('active');
     if(t.dataset.tab==='weight')renderWeightPanel();
+    if(t.dataset.tab==='chat'){renderChat();}
   };
 });
 document.getElementById('prevDay').onclick=()=>{currentDate=shiftDate(currentDate,-1);renderDate();renderTimeline();renderMemo();renderCalendar();};
@@ -809,7 +846,97 @@ document.getElementById('resetFirebase').onclick=()=>{
 };
 
 document.getElementById('checkUpdate').onclick=()=>{
-  if('serviceWorker' in navigator){
+  // Chat
+if(!state.chatMessages)state.chatMessages=[];
+
+function renderChat(){
+  const el=document.getElementById('chatMessages');
+  if(!el)return;
+  el.innerHTML='';
+  (state.chatMessages||[]).forEach(msg=>{
+    const isMe=msg.user===currentUser;
+    const isAI=msg.user==='ai';
+    const wrap=document.createElement('div');
+    wrap.className=`chat-bubble-wrap ${isAI?'ai':isMe?'mine':'other'}`;
+    const senderName=isAI?'🌿 건강 AI':msg.user==='den'?'Den':'아키';
+    const bubbleClass=isAI?'ai':isMe?'mine':'other';
+    const t=new Date(msg.ts);
+    const timeStr=`${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`;
+    wrap.innerHTML=`<div class="chat-sender">${senderName}</div><div class="chat-bubble ${bubbleClass}">${msg.text.replace(/\n/g,'<br>')}</div><div class="chat-time">${timeStr}</div>`;
+    el.appendChild(wrap);
+  });
+  el.scrollTop=el.scrollHeight;
+}
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  input.style.height='auto';
+
+  if(!state.chatMessages)state.chatMessages=[];
+  state.chatMessages.push({user:currentUser,text,ts:Date.now()});
+  await saveState();
+  renderChat();
+
+  // Show typing indicator
+  const el=document.getElementById('chatMessages');
+  const typing=document.createElement('div');
+  typing.className='chat-bubble-wrap ai';
+  typing.id='typingIndicator';
+  typing.innerHTML='<div class="chat-sender">🌿 건강 AI</div><div class="chat-typing"><span></span><span></span><span></span></div>';
+  el.appendChild(typing);
+  el.scrollTop=el.scrollHeight;
+  document.getElementById('chatSend').disabled=true;
+
+  try{
+    const context=`사용자 정보:
+- Den: 저탄고지 식단, 간헐적 단식(저녁 한 끼 기준), 결혼 후 10kg 증가, 운동 시작(경복궁 걷기), 복용 영양제: 마그네슘(Thorne), 비타민D3+K2(Thorne), 오메가3(Carlson Labs), 프로바이오틱스(Jarrow)
+- 아키: 점심 있음, 식후 복통, 복용 영양제: 오메가3, 프로바이오틱스
+- 현재 식단: ${JSON.stringify(state.meals)}`;
+
+    const messages=(state.chatMessages||[]).slice(-10).map(m=>({
+      role:m.user==='ai'?'assistant':'user',
+      content:m.user==='ai'?m.text:`[${m.user==='den'?'Den':'아키'}] ${m.text}`
+    }));
+
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':getAnthropicKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-5',
+        max_tokens:600,
+        system:`당신은 Den과 아키 부부의 건강 관리 AI 어시스턴트예요. 저탄고지 식단, 간헐적 단식, 영양제, 운동에 대해 친근하고 실용적으로 답해줘요. 한국어로 답하고, 너무 길지 않게 핵심만 말해요. 의학적 진단은 하지 않고, 필요하면 전문의 상담을 권유해요.
+
+${context}`,
+        messages
+      })
+    });
+    const d=await resp.json();
+    const aiText=d.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+    document.getElementById('typingIndicator')?.remove();
+    state.chatMessages.push({user:'ai',text:aiText,ts:Date.now()});
+    await saveState();
+    renderChat();
+  }catch(e){
+    document.getElementById('typingIndicator')?.remove();
+    state.chatMessages.push({user:'ai',text:'죄송해요, 오류가 났어요. 다시 시도해주세요.',ts:Date.now()});
+    renderChat();
+  }
+  document.getElementById('chatSend').disabled=false;
+}
+
+document.getElementById('chatSend').onclick=sendChat;
+document.getElementById('chatInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
+});
+document.getElementById('chatInput').addEventListener('input',function(){
+  this.style.height='auto';
+  this.style.height=Math.min(this.scrollHeight,100)+'px';
+});
+
+if('serviceWorker' in navigator){
     navigator.serviceWorker.getRegistration().then(reg=>{
       if(reg){
         reg.update().then(()=>{
@@ -835,6 +962,96 @@ document.getElementById('checkUpdate').onclick=()=>{
     location.reload();
   }
 };
+// Chat
+if(!state.chatMessages)state.chatMessages=[];
+
+function renderChat(){
+  const el=document.getElementById('chatMessages');
+  if(!el)return;
+  el.innerHTML='';
+  (state.chatMessages||[]).forEach(msg=>{
+    const isMe=msg.user===currentUser;
+    const isAI=msg.user==='ai';
+    const wrap=document.createElement('div');
+    wrap.className=`chat-bubble-wrap ${isAI?'ai':isMe?'mine':'other'}`;
+    const senderName=isAI?'🌿 건강 AI':msg.user==='den'?'Den':'아키';
+    const bubbleClass=isAI?'ai':isMe?'mine':'other';
+    const t=new Date(msg.ts);
+    const timeStr=`${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`;
+    wrap.innerHTML=`<div class="chat-sender">${senderName}</div><div class="chat-bubble ${bubbleClass}">${msg.text.replace(/\n/g,'<br>')}</div><div class="chat-time">${timeStr}</div>`;
+    el.appendChild(wrap);
+  });
+  el.scrollTop=el.scrollHeight;
+}
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  input.style.height='auto';
+
+  if(!state.chatMessages)state.chatMessages=[];
+  state.chatMessages.push({user:currentUser,text,ts:Date.now()});
+  await saveState();
+  renderChat();
+
+  // Show typing indicator
+  const el=document.getElementById('chatMessages');
+  const typing=document.createElement('div');
+  typing.className='chat-bubble-wrap ai';
+  typing.id='typingIndicator';
+  typing.innerHTML='<div class="chat-sender">🌿 건강 AI</div><div class="chat-typing"><span></span><span></span><span></span></div>';
+  el.appendChild(typing);
+  el.scrollTop=el.scrollHeight;
+  document.getElementById('chatSend').disabled=true;
+
+  try{
+    const context=`사용자 정보:
+- Den: 저탄고지 식단, 간헐적 단식(저녁 한 끼 기준), 결혼 후 10kg 증가, 운동 시작(경복궁 걷기), 복용 영양제: 마그네슘(Thorne), 비타민D3+K2(Thorne), 오메가3(Carlson Labs), 프로바이오틱스(Jarrow)
+- 아키: 점심 있음, 식후 복통, 복용 영양제: 오메가3, 프로바이오틱스
+- 현재 식단: ${JSON.stringify(state.meals)}`;
+
+    const messages=(state.chatMessages||[]).slice(-10).map(m=>({
+      role:m.user==='ai'?'assistant':'user',
+      content:m.user==='ai'?m.text:`[${m.user==='den'?'Den':'아키'}] ${m.text}`
+    }));
+
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':getAnthropicKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-5',
+        max_tokens:600,
+        system:`당신은 Den과 아키 부부의 건강 관리 AI 어시스턴트예요. 저탄고지 식단, 간헐적 단식, 영양제, 운동에 대해 친근하고 실용적으로 답해줘요. 한국어로 답하고, 너무 길지 않게 핵심만 말해요. 의학적 진단은 하지 않고, 필요하면 전문의 상담을 권유해요.
+
+${context}`,
+        messages
+      })
+    });
+    const d=await resp.json();
+    const aiText=d.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+    document.getElementById('typingIndicator')?.remove();
+    state.chatMessages.push({user:'ai',text:aiText,ts:Date.now()});
+    await saveState();
+    renderChat();
+  }catch(e){
+    document.getElementById('typingIndicator')?.remove();
+    state.chatMessages.push({user:'ai',text:'죄송해요, 오류가 났어요. 다시 시도해주세요.',ts:Date.now()});
+    renderChat();
+  }
+  document.getElementById('chatSend').disabled=false;
+}
+
+document.getElementById('chatSend').onclick=sendChat;
+document.getElementById('chatInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}
+});
+document.getElementById('chatInput').addEventListener('input',function(){
+  this.style.height='auto';
+  this.style.height=Math.min(this.scrollHeight,100)+'px';
+});
+
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').then(reg=>{
     reg.addEventListener('updatefound',()=>{
