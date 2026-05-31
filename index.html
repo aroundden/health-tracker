@@ -87,30 +87,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
 .btn-green{background:var(--green);color:white;border-color:var(--green);}
 .btn-sm{padding:7px 14px;font-size:13px;min-height:36px;}
 .btn-icon{padding:8px 12px;font-size:18px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;}
-/* Sleep tracker */
-.sleep-card{background:var(--card);border:1px solid var(--border-strong);border-radius:14px;padding:14px;margin-bottom:14px;}
-.sleep-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
-.sleep-summary{font-size:22px;font-weight:700;color:var(--green);}
-.sleep-summary-sub{font-size:12px;color:var(--muted);font-weight:500;}
-.sleep-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
-.sleep-input-group{display:flex;flex-direction:column;gap:4px;}
-.sleep-label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.04em;}
-.sleep-time-input{border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:16px;font-family:'SF Mono','Courier New',monospace;background:var(--bg2);color:var(--text);outline:none;width:100%;min-height:44px;}
-.sleep-time-input:focus{border-color:var(--green);}
-.sleep-bar-wrap{height:8px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-bottom:8px;}
-.sleep-bar{height:100%;border-radius:99px;transition:width .4s;}
-.sleep-log{max-height:160px;overflow-y:auto;}
-.sleep-log-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;min-height:40px;}
-.sleep-log-item:last-child{border-bottom:none;}
-/* Drag & drop routine */
-.check-row.dragging{opacity:0.4;background:var(--bg2);}
-.check-row.drag-over{border-top:2px solid var(--green);}
-.drag-handle{color:var(--hint);font-size:18px;padding:0 4px;cursor:grab;flex-shrink:0;user-select:none;}
-.drag-handle:active{cursor:grabbing;}
-.routine-edit-btn{background:none;border:none;color:var(--hint);font-size:14px;padding:4px 8px;cursor:pointer;border-radius:6px;min-width:32px;min-height:32px;}
-.routine-edit-btn:active{background:var(--bg2);}
-.edit-mode-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.edit-mode-toggle{font-size:13px;color:var(--green);font-weight:600;cursor:pointer;padding:6px 12px;border:1px solid var(--green);border-radius:10px;background:none;}
 /* Routine editor */
 .routine-editor{margin-bottom:14px;}
 .routine-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--card);border:1px solid var(--border-strong);border-radius:12px;margin-bottom:8px;}
@@ -250,7 +226,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <div class="header-left">
       <div class="header-title">건강 트래커</div>
       <div class="header-sub" id="headerSub">Den & 아키</div>
-      <div class="header-ver">v05.31 08:59</div>
+      <div class="header-ver">v05.31 09:00</div>
     </div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
@@ -274,6 +250,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
         </div>
         <div class="cal-body" id="calBody"><div class="cal-grid" id="calGrid"></div></div>
       </div>
+      <div class="sec-label">오늘 루틴</div>
       <div class="card" id="timelineList"></div>
       <div class="progress-wrap">
         <div class="progress-label"><span>오늘 달성률</span><span id="pctLabel">0%</span></div>
@@ -290,29 +267,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
           <div class="memo-user-label" style="color:var(--muted);" id="otherMemoLabel">상대 메모</div>
           <div id="otherMemoText" style="font-size:15px;color:var(--text);line-height:1.7;white-space:pre-wrap;min-height:24px;"></div>
         </div>
-      </div>
-      <div class="sec-label">수면 기록</div>
-      <div class="sleep-card">
-        <div class="sleep-title">
-          <span id="sleepUserLabel">오늘 수면</span>
-          <span class="sleep-summary" id="sleepSummary">-</span>
-        </div>
-        <div class="sleep-inputs">
-          <div class="sleep-input-group">
-            <div class="sleep-label">취침 시간</div>
-            <input type="time" class="sleep-time-input" id="sleepBedtime"/>
-          </div>
-          <div class="sleep-input-group">
-            <div class="sleep-label">기상 시간</div>
-            <input type="time" class="sleep-time-input" id="sleepWakeTime"/>
-          </div>
-        </div>
-        <div class="sleep-bar-wrap"><div class="sleep-bar" id="sleepBar" style="width:0%;background:var(--green);"></div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <span style="font-size:12px;color:var(--muted);">권장 7~8시간</span>
-          <button class="btn btn-sm btn-green" id="saveSleep">저장</button>
-        </div>
-        <div class="sleep-log" id="sleepLog"></div>
       </div>
     </div>
 
@@ -420,7 +374,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
       <div class="sec-label">앱 버전</div>
       <div class="card">
         <div class="setting-row">
-          <div><div class="setting-label">현재 버전</div><div class="setting-sub" id="currentVerLabel">v05.31 08:59</div></div>
+          <div><div class="setting-label">현재 버전</div><div class="setting-sub" id="currentVerLabel">v05.31 09:00</div></div>
           <button class="btn btn-sm btn-green" id="checkUpdate">업데이트 확인</button>
         </div>
       </div>
@@ -561,7 +515,7 @@ function renderAll(){
   const cfg=getCfg();currentUser=cfg?.user||'den';
   document.getElementById('headerSub').textContent=currentUser==='den'?'Den 모드':'아키 모드';
   document.getElementById('currentUserLabel').textContent=currentUser==='den'?'Den':'아키';
-  renderDate();renderCalendar();renderTimeline();renderMemo();renderSleep();
+  renderDate();renderCalendar();renderTimeline();renderMemo();
   renderWeek();renderGrocery();renderSettings();renderWeightPanel();renderRoutineEditor();
 }
 function renderDate(){document.getElementById('dateStr').textContent=fmtDate(currentDate);}
@@ -592,96 +546,20 @@ document.getElementById('calToggleBtn').onclick=()=>{calOpen=!calOpen;renderCale
 document.getElementById('calPrev').onclick=(e)=>{e.stopPropagation();calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();};
 document.getElementById('calNext').onclick=(e)=>{e.stopPropagation();calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();};
 
-let editMode=false;
-let dragSrcIdx=null;
-
 function renderTimeline(){
   const day=getDay(currentDate);
   const el=document.getElementById('timelineList');el.innerHTML='';
   const timeline=getTimeline();
-
-  // Edit mode toggle bar
-  const bar=document.createElement('div');bar.className='edit-mode-bar';
-  bar.innerHTML=`<div class="sec-label" style="margin:0;">오늘 루틴</div><button class="edit-mode-toggle" id="editModeBtn">${editMode?'완료':'편집'}</button>`;
-  el.parentElement.insertBefore(bar,el);
-  document.getElementById('editModeBtn').onclick=()=>{editMode=!editMode;renderTimeline();};
-
-  if(editMode){
-    // Add new routine button
-    const addBar=document.createElement('div');addBar.style.cssText='margin-bottom:10px;';
-    addBar.innerHTML=`<button class="btn btn-sm btn-green" id="quickAddBtn" style="width:100%;">+ 루틴 추가</button>`;
-    el.appendChild(addBar);
-    document.getElementById('quickAddBtn').onclick=()=>{
-      const existing=document.getElementById('quickAddForm');
-      if(existing){existing.remove();return;}
-      const form=document.createElement('div');form.id='quickAddForm';form.className='add-routine-form';
-      form.style.marginBottom='10px';
-      form.innerHTML=\`
-        <input id="qName" placeholder="항목 이름 (예: 저녁 산책)" style="margin-bottom:8px;width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--bg2);color:var(--text);outline:none;"/>
-        <input id="qSub" placeholder="설명 (선택)" style="margin-bottom:8px;width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--bg2);color:var(--text);outline:none;"/>
-        <select id="qGroup" style="margin-bottom:8px;width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--bg2);color:var(--text);outline:none;">
-          <option>🌅 기상 직후</option><option>🏃 아침 운동</option><option>🥗 점심 식사</option>
-          <option>🍽 저녁 식사</option><option>💊 저녁 식사 직후</option><option>🌙 취침 30분 전</option>
-        </select>
-        <select id="qWho" style="margin-bottom:8px;width:100%;border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--bg2);color:var(--text);outline:none;">
-          <option value="">공용</option><option value="Den">Den</option><option value="아키">아키</option>
-        </select>
-        <button id="qSave" class="btn btn-green" style="width:100%;padding:10px;">추가하기</button>
-      \`;
-      el.insertBefore(form,el.firstChild.nextSibling);
-      document.getElementById('qSave').onclick=async()=>{
-        const name=document.getElementById('qName').value.trim();if(!name)return;
-        const newItem={id:'custom_'+Date.now(),name,sub:document.getElementById('qSub').value.trim(),group:document.getElementById('qGroup').value,who:document.getElementById('qWho').value};
-        const key=currentUser==='aki'?'routineAki':'routineDen';
-        state[key]=[...state[key],newItem];
-        await saveState();editMode=true;renderTimeline();
-      };
-    };
-  }
-
-  // Render items with group labels
   const groups=[...new Set(timeline.map(i=>i.group))];
   groups.forEach(group=>{
     const groupItems=timeline.filter(i=>i.group===group);
     const gl=document.createElement('div');gl.className='time-group-label';gl.textContent=group;el.appendChild(gl);
     groupItems.forEach(item=>{
-      const itemIdx=timeline.indexOf(item);
       const done=!!day.checks[item.id];
       const row=document.createElement('div');row.className='check-row';
-      row.dataset.idx=itemIdx;
-      if(editMode){
-        row.draggable=true;
-        const badge=item.who?`<span class="who-badge">${item.who}</span>`:'';
-        row.innerHTML=\`
-          <span class="drag-handle">⠿</span>
-          <div class="check-left"><div><div class="check-name">\${item.name}</div><div class="check-sub">\${item.sub||item.group}</div></div></div>
-          \${badge}
-          <button class="routine-edit-btn" data-idx="\${itemIdx}">✕</button>\`;
-        row.querySelector('.routine-edit-btn').onclick=async(e)=>{
-          e.stopPropagation();
-          const key=currentUser==='aki'?'routineAki':'routineDen';
-          state[key]=state[key].filter((_,i)=>i!==itemIdx);
-          await saveState();renderTimeline();
-        };
-        // Drag events
-        row.addEventListener('dragstart',e=>{dragSrcIdx=itemIdx;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
-        row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.check-row').forEach(r=>r.classList.remove('drag-over'));});
-        row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over');});
-        row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
-        row.addEventListener('drop',async e=>{
-          e.preventDefault();row.classList.remove('drag-over');
-          if(dragSrcIdx===null||dragSrcIdx===itemIdx)return;
-          const key=currentUser==='aki'?'routineAki':'routineDen';
-          const arr=[...state[key]];
-          const [moved]=arr.splice(dragSrcIdx,1);arr.splice(itemIdx,0,moved);
-          state[key]=arr;dragSrcIdx=null;await saveState();renderTimeline();
-        });
-      } else {
-        const badge=item.who?`<span class="who-badge">\${item.who}</span>`:'';
-        row.innerHTML=\`<div class="check-left"><div class="check-icon\${done?' done':''}"></div><div><div class="check-name">\${item.name}</div><div class="check-sub">\${item.sub}</div></div></div>\${badge}\`;
-        row.onclick=()=>toggle(item.id);
-      }
-      el.appendChild(row);
+      const badge=item.who?`<span class="who-badge">${item.who}</span>`:'';
+      row.innerHTML=`<div class="check-left"><div class="check-icon${done?' done':''}"></div><div><div class="check-name">${item.name}</div><div class="check-sub">${item.sub}</div></div></div>${badge}`;
+      row.onclick=()=>toggle(item.id);el.appendChild(row);
     });
   });
   renderProgress();
@@ -923,8 +801,8 @@ document.querySelectorAll('.nav-item').forEach(t=>{
     if(t.dataset.tab==='routine')renderRoutineEditor();
   };
 });
-document.getElementById('prevDay').onclick=()=>{currentDate=shiftDate(currentDate,-1);renderDate();renderTimeline();renderMemo();renderSleep();renderCalendar();};
-document.getElementById('nextDay').onclick=()=>{if(currentDate<todayStr()){currentDate=shiftDate(currentDate,1);renderDate();renderTimeline();renderMemo();renderSleep();renderCalendar();}};
+document.getElementById('prevDay').onclick=()=>{currentDate=shiftDate(currentDate,-1);renderDate();renderTimeline();renderMemo();renderCalendar();};
+document.getElementById('nextDay').onclick=()=>{if(currentDate<todayStr()){currentDate=shiftDate(currentDate,1);renderDate();renderTimeline();renderMemo();renderCalendar();}};
 document.getElementById('saveMemo').onclick=async()=>{const myKey=currentUser+'_memo';getDay(currentDate)[myKey]=document.getElementById('memoInput').value;await saveState();const b=document.getElementById('saveMemo');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);};
 document.getElementById('saveWeight').onclick=async()=>{const v=parseFloat(document.getElementById('weightInput').value);if(!isNaN(v)&&v>30&&v<200){getDay(currentDate)[activeWho+'_weight']=v;await saveState();document.getElementById('weightInput').value='';renderWeightPanel();}};
 document.getElementById('saveSettings').onclick=async()=>{
@@ -938,151 +816,11 @@ document.getElementById('saveSettings').onclick=async()=>{
 document.getElementById('switchUser').onclick=()=>{const cfg=getCfg();if(!cfg)return;cfg.user=currentUser==='den'?'aki':'den';saveCfg(cfg);location.reload();};
 document.getElementById('resetFirebase').onclick=()=>{if(confirm('Firebase 설정을 초기화할까요?')){localStorage.removeItem('ht_cfg_v2');location.reload();}};
 document.getElementById('checkUpdate').onclick=()=>{
-  // Sleep tracking
-function renderSleep(){
-  const day=getDay(currentDate);
-  const myKey=currentUser+'_sleep';
-  const sleep=day[myKey]||{};
-  document.getElementById('sleepUserLabel').textContent=(currentUser==='den'?'Den':'아키')+' 수면';
-  document.getElementById('sleepBedtime').value=sleep.bed||'';
-  document.getElementById('sleepWakeTime').value=sleep.wake||'';
-  updateSleepSummary(sleep.bed,sleep.wake);
-  renderSleepLog();
-}
-
-function calcSleepHours(bed,wake){
-  if(!bed||!wake)return null;
-  const [bh,bm]=bed.split(':').map(Number);
-  const [wh,wm]=wake.split(':').map(Number);
-  let mins=(wh*60+wm)-(bh*60+bm);
-  if(mins<0)mins+=24*60;
-  return mins/60;
-}
-
-function updateSleepSummary(bed,wake){
-  const hours=calcSleepHours(bed,wake);
-  const sumEl=document.getElementById('sleepSummary');
-  const barEl=document.getElementById('sleepBar');
-  if(hours===null){sumEl.textContent='-';barEl.style.width='0%';barEl.style.background='var(--green)';return;}
-  const h=Math.floor(hours);const m=Math.round((hours-h)*60);
-  sumEl.textContent=`${h}시간 ${m>0?m+'분':''}`;
-  const pct=Math.min(hours/9*100,100);
-  barEl.style.width=pct+'%';
-  barEl.style.background=hours<6?'var(--red)':hours<7?'var(--amber)':'var(--green)';
-}
-
-function renderSleepLog(){
-  const log=document.getElementById('sleepLog');log.innerHTML='';
-  const entries=Object.entries(state.days)
-    .filter(([,v])=>v&&v[currentUser+'_sleep']&&v[currentUser+'_sleep'].bed)
-    .sort(([a],[b])=>b.localeCompare(a))
-    .slice(0,7);
-  if(entries.length===0){log.innerHTML='<div style="font-size:13px;color:var(--hint);padding:8px 0;">아직 기록이 없어요</div>';return;}
-  entries.forEach(([date,v])=>{
-    const s=v[currentUser+'_sleep'];
-    const hours=calcSleepHours(s.bed,s.wake);
-    const h=hours?Math.floor(hours):'-';
-    const m=hours?Math.round((hours-Math.floor(hours))*60):0;
-    const hoursStr=hours?`${h}시간${m>0?' '+m+'분':''}`:'-';
-    const color=!hours?'var(--muted)':hours<6?'var(--red)':hours<7?'var(--amber)':'var(--green)';
-    const row=document.createElement('div');row.className='sleep-log-item';
-    row.innerHTML=`<span style="font-size:12px;color:var(--muted);font-weight:500;">${fmtDate(date)}</span><span style="font-size:12px;color:var(--muted);">${s.bed||'-'} → ${s.wake||'-'}</span><span style="font-size:14px;font-weight:700;color:${color};">${hoursStr}</span>`;
-    log.appendChild(row);
-  });
-}
-
-document.getElementById('sleepBedtime').oninput=()=>{
-  updateSleepSummary(document.getElementById('sleepBedtime').value,document.getElementById('sleepWakeTime').value);
-};
-document.getElementById('sleepWakeTime').oninput=()=>{
-  updateSleepSummary(document.getElementById('sleepBedtime').value,document.getElementById('sleepWakeTime').value);
-};
-document.getElementById('saveSleep').onclick=async()=>{
-  const bed=document.getElementById('sleepBedtime').value;
-  const wake=document.getElementById('sleepWakeTime').value;
-  if(!bed&&!wake)return;
-  const myKey=currentUser+'_sleep';
-  getDay(currentDate)[myKey]={bed,wake};
-  await saveState();
-  const b=document.getElementById('saveSleep');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);
-  renderSleepLog();
-};
-
-if('serviceWorker' in navigator){
+  if('serviceWorker' in navigator){
     navigator.serviceWorker.getRegistration().then(reg=>{
       if(reg){reg.update().then(()=>{const b=document.getElementById('checkUpdate');b.textContent='확인 중...';setTimeout(()=>{if(reg.waiting){if(confirm('새 버전이 있어요. 지금 업데이트할까요?')){reg.waiting.postMessage({type:'SKIP_WAITING'});location.reload();}}else{b.textContent='최신 버전이에요';setTimeout(()=>b.textContent='업데이트 확인',2000);}},1500);});}else{location.reload();}
     });
   }else{location.reload();}
-};
-
-// Sleep tracking
-function renderSleep(){
-  const day=getDay(currentDate);
-  const myKey=currentUser+'_sleep';
-  const sleep=day[myKey]||{};
-  document.getElementById('sleepUserLabel').textContent=(currentUser==='den'?'Den':'아키')+' 수면';
-  document.getElementById('sleepBedtime').value=sleep.bed||'';
-  document.getElementById('sleepWakeTime').value=sleep.wake||'';
-  updateSleepSummary(sleep.bed,sleep.wake);
-  renderSleepLog();
-}
-
-function calcSleepHours(bed,wake){
-  if(!bed||!wake)return null;
-  const [bh,bm]=bed.split(':').map(Number);
-  const [wh,wm]=wake.split(':').map(Number);
-  let mins=(wh*60+wm)-(bh*60+bm);
-  if(mins<0)mins+=24*60;
-  return mins/60;
-}
-
-function updateSleepSummary(bed,wake){
-  const hours=calcSleepHours(bed,wake);
-  const sumEl=document.getElementById('sleepSummary');
-  const barEl=document.getElementById('sleepBar');
-  if(hours===null){sumEl.textContent='-';barEl.style.width='0%';barEl.style.background='var(--green)';return;}
-  const h=Math.floor(hours);const m=Math.round((hours-h)*60);
-  sumEl.textContent=`${h}시간 ${m>0?m+'분':''}`;
-  const pct=Math.min(hours/9*100,100);
-  barEl.style.width=pct+'%';
-  barEl.style.background=hours<6?'var(--red)':hours<7?'var(--amber)':'var(--green)';
-}
-
-function renderSleepLog(){
-  const log=document.getElementById('sleepLog');log.innerHTML='';
-  const entries=Object.entries(state.days)
-    .filter(([,v])=>v&&v[currentUser+'_sleep']&&v[currentUser+'_sleep'].bed)
-    .sort(([a],[b])=>b.localeCompare(a))
-    .slice(0,7);
-  if(entries.length===0){log.innerHTML='<div style="font-size:13px;color:var(--hint);padding:8px 0;">아직 기록이 없어요</div>';return;}
-  entries.forEach(([date,v])=>{
-    const s=v[currentUser+'_sleep'];
-    const hours=calcSleepHours(s.bed,s.wake);
-    const h=hours?Math.floor(hours):'-';
-    const m=hours?Math.round((hours-Math.floor(hours))*60):0;
-    const hoursStr=hours?`${h}시간${m>0?' '+m+'분':''}`:'-';
-    const color=!hours?'var(--muted)':hours<6?'var(--red)':hours<7?'var(--amber)':'var(--green)';
-    const row=document.createElement('div');row.className='sleep-log-item';
-    row.innerHTML=`<span style="font-size:12px;color:var(--muted);font-weight:500;">${fmtDate(date)}</span><span style="font-size:12px;color:var(--muted);">${s.bed||'-'} → ${s.wake||'-'}</span><span style="font-size:14px;font-weight:700;color:${color};">${hoursStr}</span>`;
-    log.appendChild(row);
-  });
-}
-
-document.getElementById('sleepBedtime').oninput=()=>{
-  updateSleepSummary(document.getElementById('sleepBedtime').value,document.getElementById('sleepWakeTime').value);
-};
-document.getElementById('sleepWakeTime').oninput=()=>{
-  updateSleepSummary(document.getElementById('sleepBedtime').value,document.getElementById('sleepWakeTime').value);
-};
-document.getElementById('saveSleep').onclick=async()=>{
-  const bed=document.getElementById('sleepBedtime').value;
-  const wake=document.getElementById('sleepWakeTime').value;
-  if(!bed&&!wake)return;
-  const myKey=currentUser+'_sleep';
-  getDay(currentDate)[myKey]={bed,wake};
-  await saveState();
-  const b=document.getElementById('saveSleep');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);
-  renderSleepLog();
 };
 
 if('serviceWorker' in navigator){
