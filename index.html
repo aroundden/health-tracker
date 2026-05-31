@@ -13,8 +13,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
   --green:#1D9E75;--green-light:#E1F5EE;--green-dark:#085041;
-  --amber:#EF9F27;--amber-light:#FAEEDA;
-  --red:#E24B4A;--red-light:#FCEBEB;
+  --amber:#EF9F27;--red:#E24B4A;--red-light:#FCEBEB;
   --bg:#ffffff;--bg2:#f7f6f3;--bg3:#efede8;
   --text:#1a1a18;--muted:#888780;--border:rgba(0,0,0,0.1);
 }
@@ -23,30 +22,18 @@
 }
 body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 .app{max-width:480px;margin:0 auto;padding-bottom:80px;}
-
-/* Header */
 .header{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-end;}
 .header-title{font-size:22px;font-weight:500;color:var(--text);}
 .header-sub{font-size:13px;color:var(--muted);margin-top:2px;}
 .date-nav{display:flex;align-items:center;gap:6px;}
 .date-nav button{background:none;border:0.5px solid var(--border);border-radius:8px;padding:5px 9px;cursor:pointer;color:var(--muted);font-size:14px;font-family:'Gowun Dodum',sans-serif;}
 .date-str{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);min-width:80px;text-align:center;}
-
-/* Bottom Nav */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:0.5px solid var(--border);display:flex;z-index:100;max-width:480px;margin:0 auto;}
-.bottom-nav{left:50%;transform:translateX(-50%);}
+.bottom-nav{position:fixed;bottom:0;background:var(--bg);border-top:0.5px solid var(--border);display:flex;z-index:100;width:100%;max-width:480px;left:50%;transform:translateX(-50%);}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 14px;cursor:pointer;color:var(--muted);font-size:11px;gap:4px;border:none;background:none;font-family:'Gowun Dodum',sans-serif;}
 .nav-item.active{color:var(--green);}
 .nav-icon{font-size:20px;line-height:1;}
-
-/* Panels */
-.panel{display:none;padding:16px 20px;}
-.panel.active{display:block;}
-
-/* Section label */
+.panel{display:none;padding:16px 20px;}.panel.active{display:block;}
 .sec-label{font-size:11px;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;text-transform:uppercase;}
-
-/* Cards */
 .card{background:var(--bg);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;}
 .check-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .15s;user-select:none;}
 .check-row:last-child{border-bottom:none;}
@@ -58,45 +45,47 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 .check-name{font-size:14px;color:var(--text);}
 .check-sub{font-size:11px;color:var(--muted);margin-top:1px;}
 .who-badge{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--bg2);color:var(--muted);}
-
-/* Progress */
 .progress-wrap{margin-bottom:14px;}
 .progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;}
 .progress-bar{height:5px;background:var(--bg3);border-radius:99px;overflow:hidden;}
 .progress-fill{height:100%;background:var(--green);border-radius:99px;transition:width .4s;}
-
-/* Streak */
-.streak-wrap{margin-bottom:20px;}
-.streak-row{display:flex;gap:5px;flex-wrap:wrap;}
-.streak-dot{width:20px;height:20px;border-radius:5px;background:var(--bg3);border:0.5px solid var(--border);}
-.streak-dot.partial{background:var(--green-light);border-color:var(--green);}
-.streak-dot.full{background:var(--green);border-color:var(--green-dark);}
-
-/* Memo */
 .memo-card{background:var(--bg);border:0.5px solid var(--border);border-radius:14px;padding:14px;}
 .memo-card textarea{width:100%;border:none;background:transparent;font-family:'Gowun Dodum',sans-serif;font-size:14px;color:var(--text);resize:none;outline:none;min-height:80px;line-height:1.7;}
 .memo-card textarea::placeholder{color:var(--muted);}
 .memo-footer{display:flex;justify-content:flex-end;margin-top:8px;}
-
-/* Buttons */
 .btn{background:none;border:0.5px solid var(--border);border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer;color:var(--muted);font-family:'Gowun Dodum',sans-serif;transition:all .15s;}
 .btn:active{opacity:.7;}
 .btn-green{background:var(--green);color:white;border-color:var(--green);}
 .btn-sm{padding:5px 12px;font-size:12px;}
-
-/* Diet tab */
+/* Calendar */
+.cal-wrap{background:var(--bg);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px;}
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.cal-title{font-size:14px;font-weight:500;color:var(--text);}
+.cal-nav{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:2px 6px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-dow{font-size:10px;color:var(--muted);text-align:center;padding:2px 0;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:12px;cursor:pointer;position:relative;color:var(--text);}
+.cal-day.empty{pointer-events:none;}
+.cal-day.other{color:var(--muted);}
+.cal-day.partial{background:var(--green-light);color:var(--green-dark);}
+.cal-day.full{background:var(--green);color:white;}
+.cal-day.today-marker{font-weight:500;}
+.cal-day.today-marker::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--amber);position:absolute;bottom:2px;}
+.cal-day.full.today-marker::after{background:white;}
+.cal-day.selected{outline:2px solid var(--green);outline-offset:1px;}
+/* Diet */
 .week-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;}
 .week-card{background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:10px 12px;}
 .week-card.today{border-color:var(--green);border-width:1.5px;}
 .week-day-label{font-size:11px;color:var(--muted);margin-bottom:3px;}
 .week-menu{font-size:13px;font-weight:500;color:var(--text);}
 .week-detail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;}
+.week-regen{font-size:10px;color:var(--green);background:none;border:none;cursor:pointer;font-family:'Gowun Dodum',sans-serif;padding:4px 0 0;display:block;}
+.week-regen:disabled{color:var(--muted);}
 .today-meal-card{background:var(--green-light);border:0.5px solid var(--green);border-radius:14px;padding:14px;margin-bottom:16px;}
-.today-meal-label{font-size:11px;color:var(--green-dark);margin-bottom:4px;letter-spacing:.05em;}
+.today-meal-label{font-size:11px;color:var(--green-dark);margin-bottom:4px;}
 .today-meal-name{font-size:17px;font-weight:500;color:var(--green-dark);}
 .today-meal-detail{font-size:12px;color:#0F6E56;margin-top:4px;line-height:1.6;}
-
-/* Grocery */
 .grocery-card{background:var(--bg);border:0.5px solid var(--border);border-radius:14px;padding:14px;}
 .grocery-cat{font-size:12px;font-weight:500;color:var(--text);margin:12px 0 6px;}
 .grocery-cat:first-child{margin-top:0;}
@@ -108,8 +97,10 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 .g-name{font-size:13px;color:var(--text);flex:1;}
 .g-name.striked{text-decoration:line-through;color:var(--muted);}
 .g-qty{font-size:11px;color:var(--muted);}
-
-/* Weight tab */
+/* Weight */
+.who-tabs{display:flex;gap:6px;margin-bottom:14px;}
+.who-tab{flex:1;padding:8px;border:0.5px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;color:var(--muted);background:none;font-family:'Gowun Dodum',sans-serif;text-align:center;}
+.who-tab.active{background:var(--green);color:white;border-color:var(--green);}
 .weight-input-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
 .weight-input-row input{flex:1;border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:16px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--text);outline:none;}
 .weight-input-row input:focus{border-color:var(--green);}
@@ -119,41 +110,35 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 .weight-log-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px;}
 .weight-log-item:last-child{border-bottom:none;}
 .weight-del{color:var(--muted);cursor:pointer;font-size:11px;padding:3px 8px;border-radius:6px;}
-.weight-del:active{background:var(--bg2);}
-
 /* Settings */
 .setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border-bottom:0.5px solid var(--border);}
 .setting-row:last-child{border-bottom:none;}
 .setting-label{font-size:14px;color:var(--text);}
 .setting-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.setting-row input{width:100px;border:0.5px solid var(--border);border-radius:10px;padding:7px 10px;font-size:14px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--text);outline:none;text-align:right;}
+.setting-row input{width:100%;max-width:200px;border:0.5px solid var(--border);border-radius:10px;padding:7px 10px;font-size:13px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--text);outline:none;text-align:right;}
 .setting-row input:focus{border-color:var(--green);}
-
-/* AI loading */
 .ai-loading{display:flex;align-items:center;gap:8px;padding:16px;font-size:13px;color:var(--muted);}
 .dot-anim span{display:inline-block;animation:bounce .8s infinite;}
 .dot-anim span:nth-child(2){animation-delay:.15s;}
 .dot-anim span:nth-child(3){animation-delay:.3s;}
 @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
 .error-box{background:var(--red-light);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:12px;}
-
-/* Firebase setup */
-.setup-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.setup-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
 .setup-box{width:100%;max-width:440px;}
 .setup-title{font-size:20px;font-weight:500;margin-bottom:8px;color:var(--text);}
-.setup-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;}
+.setup-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7;}
 .setup-input{width:100%;border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--text);outline:none;margin-bottom:8px;}
 .setup-input:focus{border-color:var(--green);}
-.setup-label{font-size:12px;color:var(--muted);margin-bottom:4px;}
+.setup-label{font-size:12px;color:var(--muted);margin-bottom:4px;margin-top:8px;}
 </style>
 </head>
 <body>
 
-<!-- Firebase Setup Overlay -->
 <div class="setup-overlay" id="setupOverlay">
   <div class="setup-box">
-    <div class="setup-title">Firebase 설정</div>
-    <div class="setup-sub">아래 값들을 Firebase 콘솔에서 복붙해주세요.<br>한 번만 하면 돼요.</div>
+    <div class="setup-title">초기 설정</div>
+    <div class="setup-sub">처음 한 번만 입력하면 돼요.</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:8px;">Firebase 설정</div>
     <div class="setup-label">API Key</div>
     <input class="setup-input" id="fb_apiKey" placeholder="AIzaSy..."/>
     <div class="setup-label">Auth Domain</div>
@@ -162,18 +147,17 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
     <input class="setup-input" id="fb_databaseURL" placeholder="https://your-app-default-rtdb.firebaseio.com"/>
     <div class="setup-label">Project ID</div>
     <input class="setup-input" id="fb_projectId" placeholder="your-app"/>
-    <br/>
-    <button class="btn btn-green" style="width:100%;margin-top:12px;padding:12px;" id="saveFirebase">저장하고 시작하기</button>
+    <div style="font-size:13px;font-weight:500;color:var(--text);margin:16px 0 4px;">Anthropic API 키</div>
+    <div class="setup-label">console.anthropic.com → API Keys</div>
+    <input class="setup-input" id="fb_anthropicKey" placeholder="sk-ant-..."/>
+    <button class="btn btn-green" style="width:100%;margin-top:16px;padding:12px;" id="saveFirebase">저장하고 시작하기</button>
     <div id="setupError" style="margin-top:8px;font-size:12px;color:var(--red);"></div>
   </div>
 </div>
 
 <div class="app" id="mainApp" style="display:none;">
   <div class="header">
-    <div>
-      <div class="header-title">건강 트래커</div>
-      <div class="header-sub">Den & 아키</div>
-    </div>
+    <div><div class="header-title">건강 트래커</div><div class="header-sub">Den & 아키</div></div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
       <span class="date-str" id="dateStr"></span>
@@ -183,6 +167,15 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 
   <div id="tab-today" class="panel active">
     <div style="height:16px;"></div>
+    <div class="sec-label">달력</div>
+    <div class="cal-wrap">
+      <div class="cal-header">
+        <button class="cal-nav" id="calPrev">‹</button>
+        <div class="cal-title" id="calTitle"></div>
+        <button class="cal-nav" id="calNext">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
     <div class="sec-label">영양제</div>
     <div class="card" id="supList"></div>
     <div class="sec-label">운동 & 식단</div>
@@ -190,10 +183,6 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
     <div class="progress-wrap">
       <div class="progress-label"><span>오늘 달성률</span><span id="pctLabel">0%</span></div>
       <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    </div>
-    <div class="streak-wrap">
-      <div class="sec-label">최근 14일</div>
-      <div class="streak-row" id="streakDots"></div>
     </div>
     <div class="sec-label">컨디션 메모</div>
     <div class="memo-card">
@@ -206,10 +195,7 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
     <div style="height:16px;"></div>
     <div class="sec-label">오늘 메뉴</div>
     <div id="todayMeal"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <div class="sec-label" style="margin:0;">이번 주 식단</div>
-      <button class="btn btn-sm btn-green" id="regen">AI 갱신 ↗</button>
-    </div>
+    <div class="sec-label">이번 주 식단</div>
     <div id="regenError"></div>
     <div class="week-grid" id="weekGrid"></div>
     <div class="sec-label">장보기 목록</div>
@@ -218,7 +204,10 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 
   <div id="tab-weight" class="panel">
     <div style="height:16px;"></div>
-    <div class="sec-label">체중 기록</div>
+    <div class="who-tabs">
+      <button class="who-tab active" data-who="den">Den</button>
+      <button class="who-tab" data-who="aki">아키</button>
+    </div>
     <div class="card" style="padding:14px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
         <span style="font-size:13px;color:var(--muted);" id="weightGoalLabel"></span>
@@ -236,42 +225,45 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--bg);color:var(--text)
 
   <div id="tab-settings" class="panel">
     <div style="height:16px;"></div>
-    <div class="sec-label">목표 설정</div>
+    <div class="sec-label">Den 목표 체중</div>
     <div class="card">
       <div class="setting-row">
         <div><div class="setting-label">현재 체중</div><div class="setting-sub">처음 한 번만</div></div>
-        <input type="number" id="settingCurrent" placeholder="kg" step="0.1"/>
+        <input type="number" id="settingDenCurrent" placeholder="kg" step="0.1"/>
       </div>
       <div class="setting-row">
-        <div><div class="setting-label">목표 체중</div><div class="setting-sub">감량 목표</div></div>
-        <input type="number" id="settingGoal" placeholder="kg" step="0.1"/>
+        <div><div class="setting-label">목표 체중</div></div>
+        <input type="number" id="settingDenGoal" placeholder="kg" step="0.1"/>
+      </div>
+    </div>
+    <div class="sec-label">아키 목표 체중</div>
+    <div class="card">
+      <div class="setting-row">
+        <div><div class="setting-label">현재 체중</div><div class="setting-sub">처음 한 번만</div></div>
+        <input type="number" id="settingAkiCurrent" placeholder="kg" step="0.1"/>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">목표 체중</div></div>
+        <input type="number" id="settingAkiGoal" placeholder="kg" step="0.1"/>
       </div>
     </div>
     <button class="btn btn-green" id="saveSettings" style="width:100%;padding:12px;margin-bottom:14px;">설정 저장</button>
-    <div class="sec-label">Firebase 재설정</div>
-    <button class="btn" id="resetFirebase" style="width:100%;padding:12px;">Firebase 설정 초기화</button>
+    <div class="sec-label">앱 설정 초기화</div>
+    <button class="btn" id="resetFirebase" style="width:100%;padding:12px;">Firebase / API 키 재설정</button>
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-item active" data-tab="today">
-      <span class="nav-icon">✓</span>오늘
-    </button>
-    <button class="nav-item" data-tab="diet">
-      <span class="nav-icon">🥗</span>식단
-    </button>
-    <button class="nav-item" data-tab="weight">
-      <span class="nav-icon">⚖</span>체중
-    </button>
-    <button class="nav-item" data-tab="settings">
-      <span class="nav-icon">⚙</span>설정
-    </button>
+    <button class="nav-item active" data-tab="today"><span class="nav-icon">✓</span>오늘</button>
+    <button class="nav-item" data-tab="diet"><span class="nav-icon">🥗</span>식단</button>
+    <button class="nav-item" data-tab="weight"><span class="nav-icon">⚖</span>체중</button>
+    <button class="nav-item" data-tab="settings"><span class="nav-icon">⚙</span>설정</button>
   </nav>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import{getDatabase,ref,set,get,onValue}from'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
 
 const SUPS=[
   {id:'mag',name:'마그네슘',sub:'Thorne · 취침 30분 전',who:'Den'},
@@ -298,44 +290,44 @@ const DEFAULT_GROCERY={
   '양념·기타':['된장','쌈장','들기름','배즙','간장'],
 };
 
-let db=null, currentDate=todayStr();
-let state={days:{},settings:{current:null,goal:null},meals:[...DEFAULT_MEALS],grocery:{...DEFAULT_GROCERY},groceryChecks:{}};
+let db=null,currentDate=todayStr(),activeWho='den',calYear,calMonth;
+let state={days:{},settings:{den:{current:null,goal:null},aki:{current:null,goal:null}},meals:[...DEFAULT_MEALS],grocery:{...DEFAULT_GROCERY},groceryChecks:{}};
 
 function todayStr(){return new Date().toISOString().slice(0,10);}
-function fmtDate(s){const d=new Date(s+'T00:00:00');return `${d.getMonth()+1}/${d.getDate()}(${['일','월','화','수','목','금','토'][d.getDay()]})`;}
+function fmtDate(s){const d=new Date(s+'T00:00:00');return`${d.getMonth()+1}/${d.getDate()}(${['일','월','화','수','목','금','토'][d.getDay()]})`;}
 function shiftDate(s,n){const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
 function todayDayIdx(){return new Date().getDay();}
-function dayKorToIdx(k){return ['일','월','화','수','목','금','토'].indexOf(k);}
-
-function getFbConfig(){
-  try{return JSON.parse(localStorage.getItem('fb_config'));}catch(e){return null;}
-}
-function saveFbConfig(cfg){localStorage.setItem('fb_config',JSON.stringify(cfg));}
+function dayKorToIdx(k){return['일','월','화','수','목','금','토'].indexOf(k);}
+function getCfg(){try{return JSON.parse(localStorage.getItem('ht_cfg'));}catch(e){return null;}}
+function saveCfg(c){localStorage.setItem('ht_cfg',JSON.stringify(c));}
+function getAnthropicKey(){return getCfg()?.anthropicKey||'';}
 
 async function initFirebase(){
-  const cfg=getFbConfig();
+  const cfg=getCfg();
   if(!cfg){showSetup();return;}
   try{
-    const app=initializeApp(cfg);
+    const app=initializeApp({apiKey:cfg.apiKey,authDomain:cfg.authDomain,databaseURL:cfg.databaseURL,projectId:cfg.projectId});
     db=getDatabase(app);
     document.getElementById('setupOverlay').style.display='none';
     document.getElementById('mainApp').style.display='block';
     await loadFromFirebase();
+    const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();
     renderAll();
     listenFirebase();
-  }catch(e){showSetup('Firebase 연결 실패: '+e.message);}
+  }catch(e){showSetup('연결 실패: '+e.message);}
 }
 
 function showSetup(err=''){
   document.getElementById('setupOverlay').style.display='flex';
   document.getElementById('mainApp').style.display='none';
   if(err)document.getElementById('setupError').textContent=err;
-  const cfg=getFbConfig();
+  const cfg=getCfg();
   if(cfg){
     document.getElementById('fb_apiKey').value=cfg.apiKey||'';
     document.getElementById('fb_authDomain').value=cfg.authDomain||'';
     document.getElementById('fb_databaseURL').value=cfg.databaseURL||'';
     document.getElementById('fb_projectId').value=cfg.projectId||'';
+    document.getElementById('fb_anthropicKey').value=cfg.anthropicKey||'';
   }
 }
 
@@ -345,14 +337,15 @@ document.getElementById('saveFirebase').onclick=async()=>{
     authDomain:document.getElementById('fb_authDomain').value.trim(),
     databaseURL:document.getElementById('fb_databaseURL').value.trim(),
     projectId:document.getElementById('fb_projectId').value.trim(),
+    anthropicKey:document.getElementById('fb_anthropicKey').value.trim(),
   };
   if(!cfg.apiKey||!cfg.databaseURL){document.getElementById('setupError').textContent='API Key와 Database URL은 필수예요.';return;}
-  saveFbConfig(cfg);
-  location.reload();
+  if(!cfg.anthropicKey){document.getElementById('setupError').textContent='Anthropic API 키를 입력해주세요.';return;}
+  saveCfg(cfg);location.reload();
 };
 
 async function loadFromFirebase(){
-  const snap=await get(ref(db,'healthtracker'));
+  const snap=await get(ref(db,'ht'));
   if(snap.exists()){
     const d=snap.val();
     if(d.days)state.days=d.days;
@@ -362,36 +355,58 @@ async function loadFromFirebase(){
     if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
   }
 }
-
 function listenFirebase(){
-  onValue(ref(db,'healthtracker'),snap=>{
-    if(snap.exists()){
-      const d=snap.val();
-      if(d.days)state.days=d.days;
-      if(d.settings)state.settings=d.settings;
-      if(d.meals)state.meals=d.meals;
-      if(d.grocery)state.grocery=d.grocery;
-      if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
-      renderAll();
-    }
+  onValue(ref(db,'ht'),snap=>{
+    if(!snap.exists())return;
+    const d=snap.val();
+    if(d.days)state.days=d.days;
+    if(d.settings)state.settings=d.settings;
+    if(d.meals)state.meals=d.meals;
+    if(d.grocery)state.grocery=d.grocery;
+    if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
+    renderAll();
   });
 }
-
-async function saveState(){
-  if(!db)return;
-  await set(ref(db,'healthtracker'),state);
-}
-
+async function saveState(){if(!db)return;await set(ref(db,'ht'),state);}
 function getDay(d){if(!state.days[d])state.days[d]={checks:{},memo:''};return state.days[d];}
+const TOTAL=SUPS.length+HABITS.length;
+function getDayScore(d){const day=state.days[d];if(!day)return 0;return[...SUPS,...HABITS].filter(x=>day.checks&&day.checks[x.id]).length;}
 
 function renderAll(){
-  renderDate();renderChecks();renderStreak();renderMemo();
-  renderWeek();renderGrocery();renderSettings();
-  const wData=Object.entries(state.days).filter(([,v])=>v&&v.weight).sort(([a],[b])=>a.localeCompare(b));
-  renderWeightLog(wData);drawChart(wData);
+  renderDate();renderCalendar();renderChecks();renderMemo();
+  renderWeek();renderGrocery();renderSettings();renderWeightPanel();
+}
+function renderDate(){document.getElementById('dateStr').textContent=fmtDate(currentDate);}
+
+// Calendar
+function renderCalendar(){
+  const months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  document.getElementById('calTitle').textContent=`${calYear}년 ${months[calMonth]}`;
+  const grid=document.getElementById('calGrid');grid.innerHTML='';
+  ['일','월','화','수','목','금','토'].forEach(d=>{
+    const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);
+  });
+  const first=new Date(calYear,calMonth,1).getDay();
+  const days=new Date(calYear,calMonth+1,0).getDate();
+  const today=todayStr();
+  for(let i=0;i<first;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
+  for(let d=1;d<=days;d++){
+    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const score=getDayScore(dateStr);
+    const el=document.createElement('div');
+    let cls='cal-day';
+    if(score===TOTAL&&TOTAL>0)cls+=' full';
+    else if(score>0)cls+=' partial';
+    if(dateStr===today)cls+=' today-marker';
+    if(dateStr===currentDate)cls+=' selected';
+    el.className=cls;el.textContent=d;
+    el.onclick=()=>{currentDate=dateStr;renderDate();renderChecks();renderMemo();renderCalendar();};
+    grid.appendChild(el);
+  }
 }
 
-function renderDate(){document.getElementById('dateStr').textContent=fmtDate(currentDate);}
+document.getElementById('calPrev').onclick=()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();};
+document.getElementById('calNext').onclick=()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();};
 
 function renderChecks(){
   const day=getDay(currentDate);
@@ -413,64 +428,41 @@ function renderChecks(){
   });
   renderProgress();
 }
-
-async function toggle(id){
-  const day=getDay(currentDate);
-  day.checks[id]=!day.checks[id];
-  await saveState();
-  renderChecks();renderStreak();
-}
-
+async function toggle(id){const day=getDay(currentDate);day.checks[id]=!day.checks[id];await saveState();renderChecks();renderCalendar();}
 function renderProgress(){
   const day=getDay(currentDate);
-  const total=SUPS.length+HABITS.length;
   const done=[...SUPS,...HABITS].filter(i=>day.checks[i.id]).length;
-  const pct=Math.round(done/total*100);
+  const pct=Math.round(done/TOTAL*100);
   document.getElementById('pctLabel').textContent=pct+'%';
   document.getElementById('progressFill').style.width=pct+'%';
 }
-
-function renderStreak(){
-  const wrap=document.getElementById('streakDots');wrap.innerHTML='';
-  const total=SUPS.length+HABITS.length;
-  for(let i=13;i>=0;i--){
-    const d=shiftDate(todayStr(),-i);
-    const day=state.days[d];
-    const done=day?[...SUPS,...HABITS].filter(x=>day.checks&&day.checks[x.id]).length:0;
-    const dot=document.createElement('div');
-    dot.className='streak-dot'+(done===total&&total>0?' full':done>0?' partial':'');
-    dot.title=fmtDate(d);wrap.appendChild(dot);
-  }
-}
-
 function renderMemo(){document.getElementById('memoInput').value=getDay(currentDate).memo||'';}
 
 function renderWeek(){
   const grid=document.getElementById('weekGrid');grid.innerHTML='';
   const todayIdx=todayDayIdx();
-  state.meals.forEach(m=>{
-    const idx=dayKorToIdx(m.day);
+  state.meals.forEach((m,idx)=>{
+    const dayIdx=dayKorToIdx(m.day);
     const card=document.createElement('div');
-    card.className='week-card'+(idx===todayIdx?' today':'');
-    card.innerHTML=`<div class="week-day-label">${m.day}요일${idx===todayIdx?' · 오늘':''}</div><div class="week-menu">${m.menu}</div><div class="week-detail">${m.detail}</div>`;
+    card.className='week-card'+(dayIdx===todayIdx?' today':'');
+    const regenBtn=`<button class="week-regen" data-idx="${idx}">이날만 갱신 ↗</button>`;
+    card.innerHTML=`<div class="week-day-label">${m.day}요일${dayIdx===todayIdx?' · 오늘':''}</div><div class="week-menu">${m.menu}</div><div class="week-detail">${m.detail}</div>${regenBtn}`;
+    card.querySelector('.week-regen').onclick=(e)=>{e.stopPropagation();regenOneDay(idx);};
     grid.appendChild(card);
   });
   renderTodayMeal();
 }
-
 function renderTodayMeal(){
   const todayIdx=todayDayIdx();
   const meal=state.meals.find(m=>dayKorToIdx(m.day)===todayIdx)||state.meals[0];
   document.getElementById('todayMeal').innerHTML=`<div class="today-meal-card"><div class="today-meal-label">오늘 저녁</div><div class="today-meal-name">${meal.menu}</div><div class="today-meal-detail">${meal.detail}</div></div>`;
 }
-
 function renderGrocery(){
   const el=document.getElementById('groceryList');el.innerHTML='';
   Object.entries(state.grocery).forEach(([cat,items])=>{
     const catEl=document.createElement('div');catEl.className='grocery-cat';catEl.textContent=cat;el.appendChild(catEl);
     items.forEach((item,i)=>{
-      const key=cat+'_'+i;
-      const done=!!state.groceryChecks[key];
+      const key=cat+'_'+i;const done=!!state.groceryChecks[key];
       const match=item.match(/^(.+?)\s+(\S+)$/);
       const name=match?match[1]:item;const qty=match?match[2]:'';
       const row=document.createElement('div');row.className='grocery-item';
@@ -482,64 +474,67 @@ function renderGrocery(){
 }
 
 async function callAI(prompt){
+  const key=getAnthropicKey();
   const resp=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
-    headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})
   });
   if(!resp.ok)throw new Error(await resp.text());
   const d=await resp.json();
   return d.content.filter(c=>c.type==='text').map(c=>c.text).join('').replace(/```json|```/g,'').trim();
 }
 
-async function regenMeals(){
-  const btn=document.getElementById('regen');
-  const errEl=document.getElementById('regenError');
-  errEl.innerHTML='';
+async function regenOneDay(idx){
+  const meal=state.meals[idx];
+  const grid=document.getElementById('weekGrid');
+  const cards=grid.querySelectorAll('.week-card');
+  const card=cards[idx];
+  const btn=card.querySelector('.week-regen');
   btn.disabled=true;btn.textContent='생성 중...';
-  document.getElementById('weekGrid').innerHTML=`<div class="ai-loading" style="grid-column:1/-1;"><div class="dot-anim"><span>·</span><span>·</span><span>·</span></div> 새 식단 짜는 중...</div>`;
+  const errEl=document.getElementById('regenError');errEl.innerHTML='';
   try{
-    const mealText=await callAI(`저탄고지 식단으로 일주일 저녁 식단을 짜줘. 조건: 1) 고기+쌈채소 위주, 밥 없이 2) 한국 가정에서 쉽게 만들 수 있게 3) 배우자도 같이 먹을 수 있게 4) 일주일에 한 번 장보기 기준으로 재료를 최대한 겹쳐서 활용 5) 재료 낭비 최소화. 반드시 JSON 배열만 응답. [{"day":"월","menu":"메뉴명","detail":"재료·조리법 간단히"},{"day":"화",...},{"day":"수",...},{"day":"목",...},{"day":"금",...},{"day":"토",...},{"day":"일",...}]`);
-    state.meals=JSON.parse(mealText);
-    const groceryText=await callAI(`이 일주일 식단 기준으로 장보기 목록을 만들어줘. 재료는 일주일치로 계산하고 겹치는 재료는 합쳐줘: ${JSON.stringify(state.meals)}. 반드시 JSON 객체만 응답. {"고기·단백질":["삼겹살 600g",...],"채소":["상추 1봉",...],"양념·기타":["된장",...]}`);
-    state.grocery=JSON.parse(groceryText);
-    state.groceryChecks={};
+    const otherMenus=state.meals.filter((_,i)=>i!==idx).map(m=>m.menu).join(', ');
+    const text=await callAI(`저탄고지 식단에서 ${meal.day}요일 저녁 메뉴 하나만 새로 추천해줘. 조건: 고기+쌈채소 위주, 밥 없이, 한국 가정에서 쉽게 만들 수 있게, 이번 주 다른 메뉴(${otherMenus})와 겹치지 않게. 반드시 JSON 객체만 응답. {"day":"${meal.day}","menu":"메뉴명","detail":"재료·조리법 간단히"}`);
+    const newMeal=JSON.parse(text);
+    state.meals[idx]=newMeal;
     await saveState();
-    renderWeek();renderGrocery();
+    renderWeek();
   }catch(e){
     errEl.innerHTML=`<div class="error-box">오류: ${e.message||'다시 시도해주세요.'}</div>`;
-    renderWeek();
+    btn.disabled=false;btn.textContent='이날만 갱신 ↗';
   }
-  btn.disabled=false;btn.textContent='AI 갱신 ↗';
 }
 
-function renderWeightLog(wData){
-  const log=document.getElementById('weightLog');log.innerHTML='';
-  const goal=state.settings.goal;
+function renderWeightPanel(){
+  const who=activeWho;
+  const cfg=state.settings[who]||{};
+  const goal=cfg.goal;
+  const wData=Object.entries(state.days).filter(([,v])=>v&&v[who+'_weight']).sort(([a],[b])=>a.localeCompare(b));
   document.getElementById('weightGoalLabel').textContent=goal?`목표 ${goal}kg`:'';
   if(wData.length>0){
-    const latest=wData[wData.length-1][1].weight;
+    const latest=wData[wData.length-1][1][who+'_weight'];
     document.getElementById('weightDiffLabel').textContent=goal?`남은 ${(latest-goal).toFixed(1)}kg`:'';
-  }
+  }else{document.getElementById('weightDiffLabel').textContent='';}
+  const log=document.getElementById('weightLog');log.innerHTML='';
   wData.slice(-10).reverse().forEach(([date,v])=>{
-    const diff=goal?` · -${(v.weight-goal).toFixed(1)}kg`:'';
+    const w=v[who+'_weight'];
+    const diff=goal?` · -${(w-goal).toFixed(1)}kg`:'';
     const row=document.createElement('div');row.className='weight-log-item';
-    row.innerHTML=`<span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);">${fmtDate(date)}</span><span style="font-size:15px;font-weight:500;color:var(--text);">${v.weight}<span style="font-size:11px;color:var(--muted);"> kg${diff}</span></span><span class="weight-del" data-date="${date}">삭제</span>`;
+    row.innerHTML=`<span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);">${fmtDate(date)}</span><span style="font-size:15px;font-weight:500;color:var(--text);">${w}<span style="font-size:11px;color:var(--muted);"> kg${diff}</span></span><span class="weight-del" data-date="${date}">삭제</span>`;
     row.querySelector('.weight-del').onclick=async(e)=>{
       const d=e.target.dataset.date;
-      if(state.days[d])delete state.days[d].weight;
-      await saveState();
-      const wd=Object.entries(state.days).filter(([,v])=>v&&v.weight).sort(([a],[b])=>a.localeCompare(b));
-      renderWeightLog(wd);drawChart(wd);
+      if(state.days[d])delete state.days[d][who+'_weight'];
+      await saveState();renderWeightPanel();
     };
     log.appendChild(row);
   });
+  drawChart(wData,who,goal);
 }
-
-function drawChart(wData){
-  const entries=(wData||[]).slice(-30);
+function drawChart(wData,who,goal){
+  const entries=wData.slice(-30);
   const labels=entries.map(([k])=>fmtDate(k));
-  const values=entries.map(([,v])=>v.weight);
+  const values=entries.map(([,v])=>v[who+'_weight']);
   const ctx=document.getElementById('wChart').getContext('2d');
   if(window._wChart)window._wChart.destroy();
   if(values.length<2){
@@ -548,60 +543,50 @@ function drawChart(wData){
     ctx.fillText('체중을 2일 이상 기록하면 그래프가 나와요',ctx.canvas.width/2,60);return;
   }
   const datasets=[{data:values,borderColor:'#1D9E75',borderWidth:2,pointRadius:3,pointBackgroundColor:'#1D9E75',tension:0.3,fill:false}];
-  if(state.settings.goal)datasets.push({data:Array(values.length).fill(state.settings.goal),borderColor:'#EF9F27',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false});
+  if(goal)datasets.push({data:Array(values.length).fill(goal),borderColor:'#EF9F27',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false});
   window._wChart=new Chart(ctx,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:true,ticks:{font:{size:10},color:'#888',maxTicksLimit:4},grid:{color:'rgba(128,128,128,0.1)'}}}}});
 }
-
 function renderSettings(){
-  if(state.settings.current)document.getElementById('settingCurrent').value=state.settings.current;
-  if(state.settings.goal)document.getElementById('settingGoal').value=state.settings.goal;
+  const den=state.settings.den||{};const aki=state.settings.aki||{};
+  if(den.current)document.getElementById('settingDenCurrent').value=den.current;
+  if(den.goal)document.getElementById('settingDenGoal').value=den.goal;
+  if(aki.current)document.getElementById('settingAkiCurrent').value=aki.current;
+  if(aki.goal)document.getElementById('settingAkiGoal').value=aki.goal;
 }
 
-// Nav
+document.querySelectorAll('.who-tab').forEach(t=>{
+  t.onclick=()=>{document.querySelectorAll('.who-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');activeWho=t.dataset.who;renderWeightPanel();};
+});
 document.querySelectorAll('.nav-item').forEach(t=>{
   t.onclick=()=>{
     document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
     t.classList.add('active');
     document.getElementById('tab-'+t.dataset.tab).classList.add('active');
+    if(t.dataset.tab==='weight')renderWeightPanel();
   };
 });
-
-document.getElementById('prevDay').onclick=()=>{currentDate=shiftDate(currentDate,-1);renderDate();renderChecks();renderMemo();};
-document.getElementById('nextDay').onclick=()=>{if(currentDate<todayStr()){currentDate=shiftDate(currentDate,1);renderDate();renderChecks();renderMemo();}};
-
+document.getElementById('prevDay').onclick=()=>{currentDate=shiftDate(currentDate,-1);renderDate();renderChecks();renderMemo();renderCalendar();};
+document.getElementById('nextDay').onclick=()=>{if(currentDate<todayStr()){currentDate=shiftDate(currentDate,1);renderDate();renderChecks();renderMemo();renderCalendar();}};
 document.getElementById('saveMemo').onclick=async()=>{
   getDay(currentDate).memo=document.getElementById('memoInput').value;
-  await saveState();
-  const b=document.getElementById('saveMemo');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);
+  await saveState();const b=document.getElementById('saveMemo');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);
 };
-
 document.getElementById('saveWeight').onclick=async()=>{
   const v=parseFloat(document.getElementById('weightInput').value);
-  if(!isNaN(v)&&v>30&&v<200){
-    getDay(currentDate).weight=v;
-    await saveState();
-    document.getElementById('weightInput').value='';
-    const wd=Object.entries(state.days).filter(([,v])=>v&&v.weight).sort(([a],[b])=>a.localeCompare(b));
-    renderWeightLog(wd);drawChart(wd);
-  }
+  if(!isNaN(v)&&v>30&&v<200){getDay(currentDate)[activeWho+'_weight']=v;await saveState();document.getElementById('weightInput').value='';renderWeightPanel();}
 };
-
 document.getElementById('saveSettings').onclick=async()=>{
-  const c=parseFloat(document.getElementById('settingCurrent').value);
-  const g=parseFloat(document.getElementById('settingGoal').value);
-  if(!isNaN(c))state.settings.current=c;
-  if(!isNaN(g))state.settings.goal=g;
-  await saveState();
-  const b=document.getElementById('saveSettings');b.textContent='저장됨';setTimeout(()=>b.textContent='설정 저장',1500);
+  if(!state.settings.den)state.settings.den={};if(!state.settings.aki)state.settings.aki={};
+  const dc=parseFloat(document.getElementById('settingDenCurrent').value);
+  const dg=parseFloat(document.getElementById('settingDenGoal').value);
+  const ac=parseFloat(document.getElementById('settingAkiCurrent').value);
+  const ag=parseFloat(document.getElementById('settingAkiGoal').value);
+  if(!isNaN(dc))state.settings.den.current=dc;if(!isNaN(dg))state.settings.den.goal=dg;
+  if(!isNaN(ac))state.settings.aki.current=ac;if(!isNaN(ag))state.settings.aki.goal=ag;
+  await saveState();const b=document.getElementById('saveSettings');b.textContent='저장됨';setTimeout(()=>b.textContent='설정 저장',1500);
 };
-
-document.getElementById('regen').onclick=regenMeals;
-
-document.getElementById('resetFirebase').onclick=()=>{
-  localStorage.removeItem('fb_config');
-  location.reload();
-};
+document.getElementById('resetFirebase').onclick=()=>{localStorage.removeItem('ht_cfg');location.reload();};
 
 initFirebase();
 </script>
