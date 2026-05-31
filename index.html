@@ -251,9 +251,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
       <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
     <div class="sec-label">컨디션 메모</div>
-    <div class="memo-card">
+    <div class="memo-card" style="margin-bottom:10px;">
+      <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:6px;letter-spacing:.05em;" id="memoUserLabel">내 메모</div>
       <textarea id="memoInput" placeholder="오늘 몸 상태, 느낀 점 자유롭게..."></textarea>
-      <div class="memo-footer"><button class="btn btn-sm" id="saveMemo">저장</button></div>
+      <div class="memo-footer"><button class="btn btn-sm btn-green" id="saveMemo">저장</button></div>
+    </div>
+    <div id="otherMemoWrap" style="display:none;">
+      <div class="memo-card" style="background:var(--bg2);">
+        <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.05em;" id="otherMemoLabel">상대 메모</div>
+        <div id="otherMemoText" style="font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap;min-height:24px;"></div>
+      </div>
     </div>
   </div>
 
@@ -556,7 +563,25 @@ function renderProgress(){
   document.getElementById('pctLabel').textContent=pct+'%';
   document.getElementById('progressFill').style.width=pct+'%';
 }
-function renderMemo(){document.getElementById('memoInput').value=getDay(currentDate).memo||'';}
+function renderMemo(){
+  const day=getDay(currentDate);
+  const myKey=currentUser+'_memo';
+  const otherUser=currentUser==='den'?'aki':'den';
+  const otherKey=otherUser+'_memo';
+  const otherName=otherUser==='den'?'Den':'아키';
+  const myName=currentUser==='den'?'Den':'아키';
+  document.getElementById('memoInput').value=day[myKey]||'';
+  document.getElementById('memoUserLabel').textContent=myName+' 메모';
+  const otherMemo=day[otherKey]||'';
+  const otherWrap=document.getElementById('otherMemoWrap');
+  if(otherMemo){
+    otherWrap.style.display='block';
+    document.getElementById('otherMemoLabel').textContent=otherName+' 메모';
+    document.getElementById('otherMemoText').textContent=otherMemo;
+  } else {
+    otherWrap.style.display='none';
+  }
+}
 
 function renderWeek(){
   const grid=document.getElementById('weekGrid');grid.innerHTML='';
@@ -620,7 +645,17 @@ window.regenToday=async function(idx){
   try{
     const meal=state.meals[idx];
     const otherMenus=state.meals.filter((_,i)=>i!==idx).map(m=>m.menu).join(', ');
-    const text=await callAI(`저탄고지 식단에서 ${meal.day}요일 저녁 메뉴 하나만 새로 추천해줘. 조건: 고기+쌈채소 위주, 밥 없이, 한국 가정에서 쉽게 만들 수 있게, 이번 주 다른 메뉴(${otherMenus})와 겹치지 않게. 반드시 JSON 객체만 응답. {"day":"${meal.day}","menu":"메뉴명","detail":"재료·조리법 간단히"}`);
+    const text=await callAI(`저탄고지 식단에서 ${meal.day}요일 저녁 메뉴 하나만 새로 추천해줘.
+조건:
+1. 고기(삼겹살·목살·소고기·닭) + 쌈채소(상추·깻잎) 위주
+2. 밥 없이 또는 소량 (저탄고지)
+3. 두부·계란·나물도 가능
+4. 한국 가정에서 15~20분 안에 만들 수 있는 것
+5. 배우자(아키)도 같이 먹을 수 있게 자극적이지 않게
+6. 이번 주 다른 메뉴(${otherMenus})와 겹치지 않게
+7. 토요일이면 탄수화물 약간 허용하는 자유식으로
+8. 일주일에 한 번 장보기 기준으로 재료 최대한 겹쳐 쓸 수 있는 것
+반드시 JSON 객체만 응답. {"day":"${meal.day}","menu":"메뉴명","detail":"주재료·조리법 간단히"}`);
     state.meals[idx]=JSON.parse(text);
     await saveState();renderWeek();renderTodayMeal();
   }catch(e){
@@ -693,7 +728,8 @@ document.querySelectorAll('.nav-item').forEach(t=>{
 document.getElementById('prevDay').onclick=()=>{currentDate=shiftDate(currentDate,-1);renderDate();renderTimeline();renderMemo();renderCalendar();};
 document.getElementById('nextDay').onclick=()=>{if(currentDate<todayStr()){currentDate=shiftDate(currentDate,1);renderDate();renderTimeline();renderMemo();renderCalendar();}};
 document.getElementById('saveMemo').onclick=async()=>{
-  getDay(currentDate).memo=document.getElementById('memoInput').value;
+  const myKey=currentUser+'_memo';
+  getDay(currentDate)[myKey]=document.getElementById('memoInput').value;
   await saveState();const b=document.getElementById('saveMemo');b.textContent='저장됨';setTimeout(()=>b.textContent='저장',1500);
 };
 document.getElementById('saveWeight').onclick=async()=>{
