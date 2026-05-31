@@ -222,7 +222,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <div>
       <div class="header-title">건강 트래커</div>
       <div class="header-sub" id="headerSub">Den & 아키</div>
-      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:12</div>
+      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:15</div>
     </div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
@@ -610,12 +610,17 @@ function renderGrocery(){
   if(!state.groceryStatus)state.groceryStatus={};
   Object.entries(state.grocery).forEach(([cat,items])=>{
     const catEl=document.createElement('div');catEl.className='grocery-cat';catEl.textContent=cat;el.appendChild(catEl);
-    items.forEach((item,i)=>{
-      const key=cat+'_'+i;const done=!!state.groceryChecks[key];
+    // 사야함 먼저, 있음 나중
+    const indexed=items.map((item,i)=>({item,i,key:cat+'_'+i}));
+    const need=indexed.filter(x=>(state.groceryStatus[x.key]||'need')==='need');
+    const have=indexed.filter(x=>(state.groceryStatus[x.key]||'need')==='have');
+    [...need,...have].forEach(({item,i,key})=>{
+      const done=!!state.groceryChecks[key];
       const status=state.groceryStatus[key]||'need';
       const match=item.match(/^(.+?)\s+(\S+)$/);
       const name=match?match[1]:item;const qty=match?match[2]:'';
       const row=document.createElement('div');row.className='grocery-item';
+      if(status==='have')row.style.opacity='0.5';
       row.innerHTML=`<div class="g-check${done?' done':''}" data-key="${key}"></div><span class="g-name${done?' striked':''}">${name}</span><span class="g-qty" style="margin-right:6px;">${qty}</span><button class="g-status ${status}" data-key="${key}">${status==='have'?'있음':'사야함'}</button>`;
       row.querySelector('.g-check').onclick=async()=>{state.groceryChecks[key]=!state.groceryChecks[key];await saveState();renderGrocery();};
       row.querySelector('.g-status').onclick=async(e)=>{
@@ -649,17 +654,21 @@ window.regenToday=async function(idx){
   try{
     const meal=state.meals[idx];
     const otherMenus=state.meals.filter((_,i)=>i!==idx).map(m=>m.menu).join(', ');
-    const text=await callAI(`저탄고지 식단에서 ${meal.day}요일 저녁 메뉴 하나만 새로 추천해줘.
-조건:
-1. 고기(삼겹살·목살·소고기·닭) + 쌈채소(상추·깻잎) 위주
-2. 밥 없이 또는 소량 (저탄고지)
-3. 두부·계란·나물도 가능
-4. 한국 가정에서 15~20분 안에 만들 수 있는 것
-5. 배우자(아키)도 같이 먹을 수 있게 자극적이지 않게
-6. 이번 주 다른 메뉴(${otherMenus})와 겹치지 않게
-7. 토요일이면 탄수화물 약간 허용하는 자유식으로
-8. 일주일에 한 번 장보기 기준으로 재료 최대한 겹쳐 쓸 수 있는 것
-반드시 JSON 객체만 응답. {"day":"${meal.day}","menu":"메뉴명","detail":"주재료·조리법 간단히"}`);
+    const text=await callAI(`저탄고지 저녁 메뉴를 완전히 새로 하나 추천해줘. 지금 메뉴(${meal.menu})가 당기지 않아서 바꾸는 거야. 반드시 지금 메뉴와 완전히 다른 요리여야 해.
+
+필수 조건:
+- 주재료가 완전히 달라야 함 (지금: ${meal.menu} → 완전히 다른 것)
+- 이번 주 이미 있는 메뉴(${otherMenus})와 절대 겹치면 안 됨
+- 저탄고지: 밥 없이, 고기나 단백질 위주
+- 한국 가정에서 쉽게 만들 수 있는 것
+- 아내도 같이 먹을 수 있는 것
+- 토요일이면 자유식 가능
+
+추천 가능한 메뉴 예시 (이것만 하라는 게 아니라 참고용):
+삼겹살구이, 목살구이, 소불고기, 닭갈비, 제육볶음, 갈비찜, 순두부찌개+고기, 된장찌개+삼겹살, 계란찜+나물, 두부김치, 오삼불고기, 쭈꾸미볶음, 낙지볶음, 생선구이, 훈제오리볶음 등
+
+반드시 JSON 객체만 응답. 다른 텍스트 없이.
+{"day":"${meal.day}","menu":"메뉴명","detail":"주재료·간단한 조리법"}`);
     state.meals[idx]=JSON.parse(text);
     await saveState();renderWeek();renderTodayMeal();
   }catch(e){
