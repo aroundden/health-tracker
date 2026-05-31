@@ -373,7 +373,11 @@ async function loadFromFirebase(){
   if(snap.exists()){
     const d=snap.val();
     if(d.days)state.days=d.days;
-    if(d.settings)state.settings=d.settings;
+    if(d.settings){
+      state.settings=d.settings;
+      if(!state.settings.den)state.settings.den={current:null,goal:null};
+      if(!state.settings.aki)state.settings.aki={current:null,goal:null};
+    }
     if(d.meals)state.meals=d.meals;
     if(d.grocery)state.grocery=d.grocery;
     if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
@@ -384,7 +388,11 @@ function listenFirebase(){
     if(!snap.exists())return;
     const d=snap.val();
     if(d.days)state.days=d.days;
-    if(d.settings)state.settings=d.settings;
+    if(d.settings){
+      state.settings=d.settings;
+      if(!state.settings.den)state.settings.den={current:null,goal:null};
+      if(!state.settings.aki)state.settings.aki={current:null,goal:null};
+    }
     if(d.meals)state.meals=d.meals;
     if(d.grocery)state.grocery=d.grocery;
     if(d.groceryChecks)state.groceryChecks=d.groceryChecks;
