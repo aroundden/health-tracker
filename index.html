@@ -223,7 +223,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue'
     <div>
       <div class="header-title">건강 트래커</div>
       <div class="header-sub" id="headerSub">Den & 아키</div>
-      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:21</div>
+      <div style="font-size:10px;color:var(--hint);margin-top:1px;">v05.31 08:23</div>
     </div>
     <div class="date-nav">
       <button id="prevDay">‹</button>
@@ -782,6 +782,18 @@ document.getElementById('resetFirebase').onclick=()=>{
   if(confirm('Firebase 설정을 초기화할까요? 다시 입력해야 해요.')){localStorage.removeItem('ht_cfg_v2');location.reload();}
 };
 
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').then(reg=>{
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;
+      nw.addEventListener('statechange',()=>{
+        if(nw.state==='installed'&&navigator.serviceWorker.controller){
+          if(confirm('새 버전이 있어요. 지금 업데이트할까요?'))location.reload();
+        }
+      });
+    });
+  });
+}
 initFirebase();
 </script>
 </body>
